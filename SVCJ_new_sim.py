@@ -19,12 +19,6 @@ btc_price.index = np.flip(btc_data['Date'])
 Y = np.log(btc_price/btc_price.shift(1))[1:]*np.sqrt(365) #return process Y
 T = Y.shape[0] #T of process
 
-# vol_of_vol = np.zeros(btc_price[30:].shape[0])
-# for i in range(btc_price[30:].shape[0]):
-#     vol_of_vol[i] = np.std(btc_price[:(29+i)])/np.sqrt(30)
-    
-# np.std(vol_of_vol)
-
 # # Parameters from MCMC for Crix log return simulation
 # N      = T  # Number of observaions in each simulation (will use n-1 since Y1 = 0)
 # beta = 0.02216727394250727
@@ -37,18 +31,22 @@ T = Y.shape[0] #T of process
 
 # Parameters from MCMC for Crix log return simulation
 N      = T  # Number of observaions in each simulation (will use n-1 since Y1 = 0)
-beta = 0.009604357835473927
-alpha =0.34272263111516055
-kappa  = 1-beta
-theta  = alpha/kappa  # Part of the long term mean of volatility
-s2V   = 0.3503119669913358/np.sqrt(365)  # Diffusion parameter of volatility (sig_v)
-mu     = 0.009604357835473927  # Drift parameter of Returns
-rho  = -0.36881915759498374
+beta = 0.002505416013268381
+alpha = 0.343820808290336
+kappa = 1-beta  
+theta  = alpha/kappa# Part of the long term mean of volatility
+s2V   = 0.3526566060798969 # Diffusion parameter of volatility (sig_v)
+rho    = -0.5348454274115587   # Brownin motion correlation
+mJ     = 2.450566305166653   # Mean of price jump size
+s2J    = 2.8667963646114725  # Variance of price jump size
+lambd =0.014506061668120155  # Intensitiy of the pure jump process
+mV     = 2.69634775159012  # Mean of volatility jump size
+rhoJ   =  -0.15902310327822086     # Jumps correlation
+mu     = 0.002505416013268381  # Drift parameter of Returns
 
 # Create empty vectors to store the simulated values
 V    = np.zeros(N)  # Volatility of log return
 v    = np.zeros(N)  # sqrt Volatility of log return
-Y    = np.zeros(N)  # Log return
 S = np.zeros(N)
 Y[0] = np.log(btc_price/btc_price.shift(1))[1:][0]*np.sqrt(365)
 V[0] =  np.sqrt((0.1*(Y-np.mean(Y))**2+0.9*(np.var(Y)))[0])#0.355 #np.var(np.log(btc_price/btc_price.shift(1))[1:]) # Initial value of volatility = mean of volatilty
@@ -63,6 +61,7 @@ for iters in tqdm(range(int(1e4))):
         Zy        = np.random.normal(0,1)  # Standard normal random value
         Z_interim       = np.random.normal(0,1)  # Standard normal random value
         Zv       = rho*Zy + np.sqrt(1-rho**2)*Z_interim
+        
           
                   
         #V[i]  = kappa * theta + (1 - kappa) * V[i - 1] + s2V**0.5* np.sqrt(max(V[i - 1],0))* Zv

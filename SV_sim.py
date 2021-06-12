@@ -48,13 +48,13 @@ v    = np.zeros(N)  # sqrt Volatility of log return
 Y    = np.zeros(N)  # Log return
 S = np.zeros(N)
 Y[0] = np.log(btc_price/btc_price.shift(1))[1:][0]*np.sqrt(365)
-V[0] =  np.sqrt((0.1*(Y-np.mean(Y))**2+0.9*(np.var(Y)))[0])#0.355 #np.var(np.log(btc_price/btc_price.shift(1))[1:]) # Initial value of volatility = mean of volatilty
-v[0] = np.sqrt(V[0])
+v[0] =  np.sqrt((0.1*(Y-np.mean(Y))**2+0.9*(np.var(Y)))[0])#0.355 #np.var(np.log(btc_price/btc_price.shift(1))[1:]) # Initial value of volatility = mean of volatilty
+#v[0] = np.sqrt(V[0])
 S[0] = btc_price[0]
 
-btc_sim=np.zeros([int(1e4),T])
-v_sim=np.zeros([int(1e4),T])
-for iters in tqdm(range(int(1e4))): 
+btc_sim=np.zeros([int(1e3),T])
+v_sim=np.zeros([int(1e3),T])
+for iters in tqdm(range(int(1e3))): 
     # Run the simulation T times and save the calculated values
     for i in range(1,N):
         Zy        = np.random.normal(0,1)  # Standard normal random value
