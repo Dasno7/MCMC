@@ -67,7 +67,7 @@ def getLongTermVar(annualized_returns,x):
 a=np.mean(Y);A=np.var(Y);#b=0;B=1;c=0;C=1;
 d,D = get_hyperGamma(Y,30)
 theta_star,theta_starVar = getLongTermVar(Y,30)
-kappa_star = 0.5;kappa_starVar=0.01
+kappa_star = 0.5;kappa_starVar=0.1
 b=kappa_star*theta_star;B=theta_starVar*kappa_starVar
 c=1-kappa_star;C = kappa_starVar
 e = np.mean(Y[np.where(J==1)[0]]); E = np.var(Y[np.where(J==1)[0]])
