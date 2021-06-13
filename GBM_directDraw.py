@@ -11,6 +11,7 @@ import scipy.stats as stats
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 from math import gamma
+import datetime
 
 #BTC price data
 cryptos = ['Bitcoin','LINK','ETH','ADA']
@@ -28,6 +29,9 @@ for crypto in cryptos:
     P[crypto] = price
     Y[crypto] = np.log(price/price.shift(1))[1:]*np.sqrt(365) #return process Y
     T[crypto] = Y[crypto].shape[0] #T of process
+    format_str = "%b %d, %Y"
+    Y[crypto].index = [datetime.datetime.strptime(Y[crypto].index[j],format_str) for j in range(T[crypto])]
+
 
 
 def get_hyperGamma(annualized_returns, x):

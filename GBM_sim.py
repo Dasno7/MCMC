@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+import datetime
 
 #BTC price data
 #cryptos = ['Bitcoin','LINK','ETH','ADA']
@@ -26,10 +27,13 @@ for crypto in cryptos:
     P[crypto] = price
     Y[crypto] = np.log(price/price.shift(1))[1:]*np.sqrt(365) #return process Y
     T[crypto] = Y[crypto].shape[0] #T of process
+    format_str = "%b %d, %Y"
+    Y[crypto].index = [datetime.datetime.strptime(Y[crypto].index[j],format_str) for j in range(T[crypto])]
+
 
 N      =T
-m =0.06792776181895642#/np.sqrt(365)
-sigma2_y = 1.8445376492537082#/np.sqrt(365)
+m ={'Bitcoin': 0.02817135116188635, 'LINK': 0.06792776181895642, 'ETH': 0.028163787262985164, 'ADA': 0.026269044494565446}#/np.sqrt(365)
+sigma2_y = {'Bitcoin': 0.6945836313141901, 'LINK': 1.8381271048871903, 'ETH': 1.123005248647937, 'ADA': 1.3440624591240018}#/np.sqrt(365)
 
 
 def stock_path_sim(N,TT,S_0,mu,sigma2):
@@ -50,14 +54,15 @@ def stock_path_sim(N,TT,S_0,mu,sigma2):
 #                                         sigma * np.sqrt(dt) * rand)
 #    return paths
 for crypto in Y.keys():
-    sim=np.zeros([int(1e5),T[crypto]+1])
-    for i in tqdm(range(int(1e5))):  
-        sim[i,:] = stock_path_sim(T[crypto],T[crypto]/365,P[crypto][0],m,sigma2_y)
-    #btc_sim = stock_path_sim(T,1,btc_price[-1],m,sigma2_y)
-    #btc_sim = gen_paths(btc_price[-1],m,sigma2_y**0.5,0.01,T,1)    
+    sim=np.zeros([int(1e6),T[crypto]+1])
+    for i in tqdm(range(int(1e6))):  
+        sim[i,:] = stock_path_sim(T[crypto],T[crypto]/365,P[crypto][0],m[crypto],sigma2_y[crypto])    
     
-    pd.Series(np.mean(sim,axis=0)[:-1],index=Y[crypto].index).plot(figsize=(10,7),loglog=True)
-    pd.Series(sim[np.where(sim==max(np.max(sim,axis=1)))[0][0],:-1],index=Y[crypto].index).plot(loglog=True,figsize=(10,7))
+    # pd.Series(np.mean(sim,axis=0)[:-1],index=Y[crypto].index).plot(figsize=(10,7),loglog=True)
+    # pd.Series(sim[np.where(sim==max(np.max(sim,axis=1)))[0][0],:-1],index=Y[crypto].index).plot(loglog=True,figsize=(10,7))
+    sns.set_theme(style="darkgrid")
+    f, (a0, a1) = plt.subplots(1, 2, gridspec_kw={'width_ratios': [3, 1],'wspace':0})
+
 
 #plt.plot(np.mean(btc_sim,axis=0))
 #plt.show()

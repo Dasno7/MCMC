@@ -10,6 +10,7 @@ import scipy.stats as stats
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 from math import gamma
+import datetime
 
 #BTC price data
 btc_data = pd.read_csv("Crypto Data Repo/Bitcoin Historical Data.csv")
@@ -18,6 +19,9 @@ btc_price.index = np.flip(btc_data['Date'])
 Y = np.log(btc_price/btc_price.shift(1))[1000:]*np.sqrt(365) #return process Y
 #Y = ((btc_price-btc_price.shift(1))/btc_price.shift(1))[1:]
 T = Y.shape[0] #T of process
+format_str = "%b %d, %Y"
+Y.index = [datetime.datetime.strptime(Y.index[j],format_str) for j in range(T)]
+
 
 def get_hyperGamma(annualized_returns, x):
     Dayx_vol = np.zeros(annualized_returns.shape[0])    

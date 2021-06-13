@@ -5,10 +5,13 @@ Created on Thu Jun  3 12:06:58 2021
 @author: Dasno7
 """
 
+'AIzaSyDLZBZR91am6ocLlY94uAO2Y_H7CHio0nQ'
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+import datetime
 
 #BTC price data
 #cryptos = ['Bitcoin','LINK','ETH','ADA']
@@ -27,6 +30,9 @@ for crypto in cryptos:
     P[crypto] = price
     Y[crypto] = np.log(price/price.shift(1))[1:]*np.sqrt(365) #return process Y
     T[crypto] = Y[crypto].shape[0] #T of process
+    format_str = "%b %d, %Y"
+    Y[crypto].index = [datetime.datetime.strptime(Y[crypto].index[j],format_str) for j in range(T[crypto])]
+
 
 m =0.08275157796180288#/np.sqrt(365)
 sigma2 = 0.47697741076075706#/np.sqrt(365)

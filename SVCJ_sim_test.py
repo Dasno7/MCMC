@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+import datetime
 
 #BTC price data
 btc_data = pd.read_csv("Crypto Data Repo/Bitcoin Historical Data.csv")
@@ -16,6 +17,8 @@ btc_price = np.flip(pd.Series(btc_data['Price'].str.replace(',','').astype(float
 btc_price.index = np.flip(btc_data['Date'])
 Y = np.log(btc_price/btc_price.shift(1))[1:]*np.sqrt(365) #return process Y
 T = Y.shape[0] #T of process
+format_str = "%b %d, %Y"
+Y.index = [datetime.datetime.strptime(Y.index[j],format_str) for j in range(T)]
 
 N      = T  # Number of observaions in each simulation (will use n-1 since Y1 = 0)
 beta = 0.002505416013268381

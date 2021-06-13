@@ -10,6 +10,7 @@ import numpy as np
 import scipy.stats as stats
 from tqdm import tqdm
 import matplotlib.pyplot as plt
+import datetime
 # from math import gamma
 #from multiprocess import Pool
 
@@ -20,6 +21,8 @@ btc_price = np.flip(pd.Series(btc_data['Price']))#.str.replace(',','').astype(fl
 btc_price.index = np.flip(btc_data['Date'])
 Y = np.log(btc_price/btc_price.shift(1))[1:]*np.sqrt(365) #return process Y
 T = Y.shape[0] #T of process
+format_str = "%b %d, %Y"
+Y.index = [datetime.datetime.strptime(Y.index[j],format_str) for j in range(T)]
 J = (abs(Y)-np.mean(Y)>2*np.std(Y)).astype(int) # starting value of jumps
 V = 0.1*(Y-np.mean(Y))**2+0.9*(np.var(Y)) #initial values for variance_t
 
