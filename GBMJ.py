@@ -28,7 +28,7 @@ def get_hyperGamma(annualized_returns, x):
         Dayx_vol[i] = np.std(annualized_returns[i:(x-1+i)])
         Day1_vol[i] = Dayx_vol[i]/np.sqrt(x)
     mu_gamma = np.var(annualized_returns)
-    var_gamma = np.var(Day1_vol)
+    var_gamma = np.var(Day1_vol)*np.sqrt(365)
     a= mu_gamma**2/var_gamma+2
     b= (a-1)*mu_gamma
     return a,b

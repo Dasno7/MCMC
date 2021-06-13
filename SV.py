@@ -28,7 +28,7 @@ def get_hyperGamma(annualized_returns, x):
         Dayx_vol[i] = np.std(annualized_returns[i:(x-1+i)])
         Day1_vol[i] = Dayx_vol[i]/np.sqrt(x)
     mu_gamma = np.var(annualized_returns)
-    var_gamma = np.var(Day1_vol)
+    var_gamma = np.var(Day1_vol)*np.sqrt(365)
     a= mu_gamma**2/var_gamma+2
     b= (a-1)*mu_gamma
     return a,b
@@ -40,19 +40,19 @@ def getLongTermVar(annualized_returns,x):
         Dayx_vol[i] = np.std(annualized_returns[i:(x-1+i)])
         Day1_vol[i] = Dayx_vol[i]/np.sqrt(x)
     mu_theta = np.var(annualized_returns)
-    var_theta = np.var(Day1_vol)
+    var_theta = np.var(Dayx_vol)
     return mu_theta,var_theta
 
 #Prior distribution hyperparameter values
 a=np.mean(Y);A=np.var(Y);#b=0;B=1;c=0;C=1;
-d,D = get_hyperGamma(Y,30)
+V = 0.1*(Y-np.mean(Y))**2+0.9*(np.var(Y)) #initial values for variance_t
+d,D = get_hyperGamma(V,30)
 theta_star,theta_starVar = getLongTermVar(Y,30)
 kappa_star = 0.5;kappa_starVar=0.1
 b=kappa_star*theta_star;B=theta_starVar*kappa_starVar
 c=1-kappa_star;C = kappa_starVar
 
 #starting values parameters
-V = 0.1*(Y-np.mean(Y))**2+0.9*(np.var(Y)) #initial values for variance_t
 #V0=V[0]
 #V_min1 = pd.Series(np.append(V[0],np.array(V.shift(1)[1:])),index= V.index)
 sigma2_v=D/(d-1)

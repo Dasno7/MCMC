@@ -15,17 +15,18 @@ import matplotlib.pyplot as plt
 
 
 #BTC price data
-btc_data = pd.read_csv("Crypto Data Repo/Bitcoin Historical Data.csv")
-btc_price = np.flip(pd.Series(btc_data['Price'].str.replace(',','').astype(float)))
+btc_data = pd.read_csv("Crypto Data Repo/LINK Historical Data.csv")
+btc_price = np.flip(pd.Series(btc_data['Price']))#.str.replace(',','').astype(float)))
 btc_price.index = np.flip(btc_data['Date'])
 Y = np.log(btc_price/btc_price.shift(1))[1:]*np.sqrt(365) #return process Y
 T = Y.shape[0] #T of process
 J = (abs(Y)-np.mean(Y)>2*np.std(Y)).astype(int) # starting value of jumps
+V = 0.1*(Y-np.mean(Y))**2+0.9*(np.var(Y)) #initial values for variance_t
 
 def get_hyperBeta(annualized_returns):
     J = (abs(annualized_returns)-np.mean(annualized_returns)>2*np.std(annualized_returns)).astype(int) 
     mean = np.sum(J)/J.shape[0]
-    var = 2*40/((42**2)*43) #approx var used for lambda
+    var = 2*40/((42**2)*43) *10 #approx var used for lambda
     a = ((1-mean)*mean**2)/(var*(mean+1))
     b = a*(1-mean)/mean
     return a,b
@@ -48,7 +49,7 @@ def get_hyperGamma(annualized_returns, x):
         Dayx_vol[i] = np.std(annualized_returns[i:(x-1+i)])
         Day1_vol[i] = Dayx_vol[i]/np.sqrt(x)
     mu_gamma = np.var(annualized_returns)
-    var_gamma = np.var(Day1_vol)
+    var_gamma = np.var(Dayx_vol)
     a= mu_gamma**2/var_gamma+2
     b= (a-1)*mu_gamma
     return a,b
@@ -60,7 +61,7 @@ def getLongTermVar(annualized_returns,x):
         Dayx_vol[i] = np.std(annualized_returns[i:(x-1+i)])
         Day1_vol[i] = Dayx_vol[i]/np.sqrt(x)
     mu_theta = np.var(annualized_returns)
-    var_theta = np.var(Day1_vol)
+    var_theta = np.var(Dayx_vol)
     return mu_theta,var_theta
 
 #Prior distribution hyperparameter values
@@ -75,13 +76,12 @@ k,K = get_hyperBeta(Y) #hyper lambda
 g=0;G=4 #rho_j
 
 #starting values parameters
-V = 0.1*(Y-np.mean(Y))**2+0.9*(np.var(Y)) #initial values for variance_t
 #V0=V[0]
 #V_min1 = pd.Series(np.append(V[0],np.array(V.shift(1)[1:])),index= V.index)
 sigma2_v=D/(d-1)
 alpha=b;beta=c;m=a;rho=0;
 r,R = get_hyperGamma(Y[np.where(J==1)[0]],5) #hyper of mu_v
-mu_v = (R/(r-1))**0.5
+mu_v = (R/(r-1))
 xi_v = np.random.exponential(mu_v,T)
 rho_j=0
 sigma2_s = E
