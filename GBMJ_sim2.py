@@ -5,8 +5,6 @@ Created on Thu Jun  3 12:06:58 2021
 @author: Dasno7
 """
 
-'AIzaSyDLZBZR91am6ocLlY94uAO2Y_H7CHio0nQ'
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
