@@ -28,8 +28,8 @@ for crypto in cryptos:
     P[crypto] = price
     Y[crypto] = np.log(price/price.shift(1))[1:]*np.sqrt(365) #return process Y
     T[crypto] = Y[crypto].shape[0] #T of process
-    format_str = "%b %d, %Y"
-    Y[crypto].index = [datetime.datetime.strptime(Y[crypto].index[j],format_str) for j in range(T[crypto])]
+    #format_str = "%b %d, %Y"
+    #Y[crypto].index = [datetime.datetime.strptime(Y[crypto].index[j],format_str) for j in range(T[crypto])]
 
 
 m =0.08275157796180288#/np.sqrt(365)
@@ -59,21 +59,21 @@ def stock_path_sim(N,TT,S_0,mu,sigma2,m_j,sigma2_j,lamb):
 #                                         sigma * np.sqrt(dt) * rand)
 #    return paths
 for crypto in Y.keys():
-    sim=np.zeros([int(1e5),T[crypto]+1])
+    sim=np.zeros([int(1e4),T[crypto]+1])
     N      =T[crypto]
     S = np.zeros(N)
     Y_ret = np.zeros(N-1)
     S[0] = P[crypto][0]
-    for i in tqdm(range(int(1e5))):  
+    for i in tqdm(range(int(1e4))):  
         sim[i,:] = stock_path_sim(T[crypto],T[crypto]/365,P[crypto][0],m,sigma2,m_j,sigma2_j,lamb)
     #btc_sim = stock_path_sim(T,1,btc_price[-1],m,sigma2_y)
     #btc_sim = gen_paths(btc_price[-1],m,sigma2_y**0.5,0.01,T,1)    
     
     pd.Series(np.mean(sim,axis=0)[:-1],index=Y[crypto].index).plot(figsize=(10,7),loglog=True)
-    pd.Series(sim[np.where(sim==max(np.max(sim,axis=1)))[0][0],:-1],index=Y[crypto].index).plot(loglog=True,figsize=(10,7))
+    pd.Series(sim[np.where(sim==max(np.max(sim,axis=1)))[0][0],:-1],index=Y[crypto].index).plot(figsize=(10,7),loglog=True)
 
-plt.hist(np.log(sim[:,-1]),bins =1000)
-plt.show()
+#plt.hist(np.log(sim[:,-1]),bins =1000)
+#plt.show()
 #plt.plot(np.mean(btc_sim,axis=0))
 #plt.show()
 #print(btc_sim)
