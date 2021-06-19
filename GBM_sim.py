@@ -11,7 +11,7 @@ from tqdm import tqdm
 import datetime
 import seaborn as sns
 
-#BTC price data
+#price data
 cryptos = ['Bitcoin','LINK','ETH','ADA']
 #cryptos=['Bitcoin']
 Y={}
@@ -36,6 +36,12 @@ N      =T
 m ={'Bitcoin': 0.02817135116188635, 'LINK': 0.06792776181895642, 'ETH': 0.028163787262985164, 'ADA': 0.026269044494565446}#/np.sqrt(365)
 sigma2_y = {'Bitcoin': 0.6945836313141901, 'LINK': 1.8381271048871903, 'ETH': 1.123005248647937, 'ADA': 1.3440624591240018}#/np.sqrt(365)
 
+
+N = T[crypto]
+TT = T[crypto]/365
+S_0 = P[crypto][0]
+mu=m[crypto]
+sigma2 = sigma2_y[crypto]
 
 def stock_path_sim(N,TT,S_0,mu,sigma2):
     interval = np.array(range(N+1))/N
@@ -65,8 +71,12 @@ for crypto in Y.keys():
     for i in tqdm(range(int(1e4))):  
         sim[i,:] = stock_path_sim(T[crypto],T[crypto]/365,P[crypto][0],m[crypto],sigma2_y[crypto])    
     
+    P[crypto].name='Real data'
+    pd.merge(
     pd.merge(pd.Series(np.mean(sim,axis=0)[:-1],index=Y[crypto].index, name ="Average"),\
-    pd.Series(sim[np.where(sim==max(np.max(sim,axis=1)))[0][0],:-1],index=Y[crypto].index, name ="Maximum"),left_index=True,right_index=True).plot(figsize=(10,7),loglog=True,ax=listAx[crypto])
+    pd.Series(sim[np.where(sim==max(np.max(sim,axis=1)))[0][0],:-1]\
+              ,index=Y[crypto].index, name ="Maximum"),left_index=True,right_index=True),\
+         P[crypto],left_index=True,right_index=True).plot(figsize=(10,7),loglog=True,ax=listAx[crypto])
     listAx[crypto].set(xlabel=None)
     listAx[crypto].set_title(cryptoNames[crypto],fontdict= { 'fontsize': 18, 'fontweight':'bold'})
     

@@ -21,8 +21,8 @@ btc_price = np.flip(pd.Series(btc_data['Price'].str.replace(',','').astype(float
 btc_price.index = np.flip(btc_data['Date'])
 Y = np.log(btc_price/btc_price.shift(1))[1:]*np.sqrt(365) #return process Y
 T = Y.shape[0] #T of process
-format_str = "%b %d, %Y"
-Y.index = [datetime.datetime.strptime(Y.index[j],format_str) for j in range(T)]
+# format_str = "%b %d, %Y"
+# Y.index = [datetime.datetime.strptime(Y.index[j],format_str) for j in range(T)]
 
 def get_hyperGamma(annualized_returns, x):
     Dayx_vol = np.zeros(annualized_returns.shape[0])    
@@ -71,7 +71,7 @@ stdRho = 0.005; dfRho = 6.5;acceptPropRho = 0;rhotot=0;rhotot2=0 #drawing rho
 dfV = 4.5; stdV=0.9; Vtot=0;Vtot2=0;acceptPropV=np.zeros(T)
 
 
-N=10000;burn=3000 #Number of draws and burn period
+N=100000;burn=30000 #Number of draws and burn period
 sig2V_save = np.zeros(N)
 rho_save = np.zeros(N)
 for i in tqdm(range(N)):
@@ -103,8 +103,8 @@ for i in tqdm(range(N)):
     beta=np.random.normal(c_star,C_star**0.5)
     
     if i>burn:
-        betatot += m
-        betatot2 =+ m**2
+        betatot += beta
+        betatot2 =+ beta**2
         
     #Draw sigma2_v
     d_star = d+T
@@ -231,8 +231,8 @@ V_result = Vtot/(N-burn)
 print(m,sigma2_v,alpha,beta,rho)
         
 #Y.plot()
-plt.plot(sig2V_save)
-plt.show()
+# plt.plot(sig2V_save)
+# plt.show()
         
 
     

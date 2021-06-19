@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 import scipy.stats as stats 
 from tqdm import tqdm
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import datetime
 
 #BTC price data
@@ -62,7 +62,7 @@ Jtot=0 #drawing J's
 xitot=0;lambtot=0;lambtot2=0 #drawing lambda
 m_jtot=0;m_jtot2=0;sigma2_jtot=0;sigma2_jtot2=0
 
-N=100000;burn=3000 #Number of draws and burn period
+N=100000;burn=30000 #Number of draws and burn period
 sig2_save = np.zeros(N)
 mu_save = np.zeros(N)
 lamb_save = np.zeros(N)
@@ -144,7 +144,7 @@ sigma2_j = sigma2_jtot/(N-burn)
 lamb = lambtot/(N-burn)
 print(m,sigma2,lamb,m_j,sigma2_j,np.sum(J),np.mean(xi))
         
-plt.plot(sig2_save)
+plt.plot(lamb_save)
 plt.show()
         
 
