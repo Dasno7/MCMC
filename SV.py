@@ -187,7 +187,7 @@ for i in tqdm(range(N)):
     u = np.random.uniform(0,1,T)
     if u[0]< acceptV:
         V[0]=Vprop[0]
-        if i>burn: acceptPropV[0]+=acceptPropV[0]+1
+        if i>burn: acceptPropV[0]+=1
     
     #j==(1,...,T-2)
     for j in range(1,T-1):
@@ -199,7 +199,7 @@ for i in tqdm(range(N)):
         acceptV=min(p1/p2,1) if p2!=0 else 1 if p1>0 else 0 
         if u[j]< acceptV:
             V[j]=Vprop[j]
-            if i>burn: acceptPropV[j]+=acceptPropV[j]+1
+            if i>burn: acceptPropV[j]+=1
             
     #j==(T-1)
     p1 = max(0,Vprop[T-1]**(-0.5)*np.exp(-0.5*((Y[T-1]-m-rho/sigma2_v**0.5*(Vprop[T-1]-alpha-beta*V[T-2]))**2/(V[T-2]*(1-rho**2)) + (Vprop[T-1]-alpha-beta*V[T-2])**2/(V[T-2]*sigma2_v))))
@@ -208,7 +208,7 @@ for i in tqdm(range(N)):
     acceptV=min(p1/p2,1) if p2!=0 else 1 if p1>0 else 0 
     if u[T-1]< acceptV:
         V[T-1]=Vprop[T-1]
-        if i>burn: acceptPropV[T-1]+=acceptPropV[T-1]+1
+        if i>burn: acceptPropV[T-1]+=1
     
     if i>burn: Vtot+= V
     if i>np.floor(burn/2)-100 or i < np.floor(burn/2):   Vtot2 += V

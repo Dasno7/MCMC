@@ -37,12 +37,6 @@ m ={'Bitcoin': 0.02817135116188635, 'LINK': 0.06792776181895642, 'ETH': 0.028163
 sigma2_y = {'Bitcoin': 0.6945836313141901, 'LINK': 1.8381271048871903, 'ETH': 1.123005248647937, 'ADA': 1.3440624591240018}#/np.sqrt(365)
 
 
-N = T[crypto]
-TT = T[crypto]/365
-S_0 = P[crypto][0]
-mu=m[crypto]
-sigma2 = sigma2_y[crypto]
-
 def stock_path_sim(N,TT,S_0,mu,sigma2):
     interval = np.array(range(N+1))/N
     t = interval*TT

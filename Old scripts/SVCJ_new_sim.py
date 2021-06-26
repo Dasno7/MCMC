@@ -12,6 +12,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
+#Final param results
+#print(m,sigma2_v,alpha,beta,rho,mV,mS,sigma2_s,sigma2_v,rho_j,lamb)
+# ]
+# 0.03497079965610104 0.40649583389463223 0.37367411208660023 0.7958167385421553 -0.12095241548424931 18.996430289037885 17.348926363905395 11.528656249919617 0.40649583389463223 -0.08942473713484263 0.0023415514605686677
+
+
 #BTC price data
 btc_data = pd.read_csv("Crypto Data Repo/Bitcoin Historical Data.csv")
 btc_price = np.flip(pd.Series(btc_data['Price'].str.replace(',','').astype(float)))

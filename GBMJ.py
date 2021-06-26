@@ -9,18 +9,20 @@ import pandas as pd
 import numpy as np
 import scipy.stats as stats 
 from tqdm import tqdm
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import datetime
+import seaborn as sns
+from matplotlib import rc
 
 #BTC price data
-btc_data = pd.read_csv("Crypto Data Repo/Bitcoin Historical Data.csv")
-btc_price = np.flip(pd.Series(btc_data['Price'].str.replace(',','').astype(float)))
+btc_data = pd.read_csv("Crypto Data Repo/LINK Historical Data.csv")
+btc_price = np.flip(pd.Series(btc_data['Price']))#.str.replace(',','').astype(float)))
 btc_price.index = np.flip(btc_data['Date'])
 Y = np.log(btc_price/btc_price.shift(1))[1:]*np.sqrt(365) #return process Y
 #Y = ((btc_price-btc_price.shift(1))/btc_price.shift(1))[1:]
 T = Y.shape[0] #T of process
-format_str = "%b %d, %Y"
-Y.index = [datetime.datetime.strptime(Y.index[j],format_str) for j in range(T)]
+#format_str = "%b %d, %Y"
+#Y.index = [datetime.datetime.strptime(Y.index[j],format_str) for j in range(T)]
 J = (abs(Y)-np.mean(Y)>2*np.std(Y)).astype(int) # starting value of jumps
 
 def get_hyperGamma(annualized_returns, x):
@@ -142,10 +144,32 @@ sigma2=sigma2tot/(N-burn)
 m_j = m_jtot/(N-burn)
 sigma2_j = sigma2_jtot/(N-burn)
 lamb = lambtot/(N-burn)
+J_result = np.round(Jtot/(N-burn))
+xi_result = xitot/(N-burn)
 print(m,sigma2,lamb,m_j,sigma2_j,np.sum(J),np.mean(xi))
         
-plt.plot(lamb_save)
-plt.show()
+
+sns.set_theme(style='darkgrid')
+ax = pd.Series(J_result*xi_result,index=Y.index).plot(figsize=(12,3.75)\
+                                                 ,ylabel="Annualized log return")
+ax.set(xlabel=None)
+ax.set_title('Bitcoin return jumps',fontdict= { 'fontsize': 18, 'fontweight':'bold'})
+
+    
+#     plt.plot(J_result*xi_result)
+
+
+fig, ax = plt.subplots(1,2,figsize=(12,3.75),constrained_layout=True)
+sns.lineplot(data=sigma2J_save,ax=ax[0])
+ax[0].set_title(r'$\sigma_J^2$',fontdict= { 'fontsize': 18, 'fontweight':'bold'})
+# ax1[0] = sns.lineplot(data=pd.merge(pd.Series(sigma2J_save,name=r'\sigma_J^2'),pd.Series(lamb_save,name=r'\lambda')\
+#          ,left_index=True,right_index=True))
+ax[0].set(xlabel='iters')
+sns.lineplot(data=lamb_save,ax=ax[1])  
+ax[1].set(xlabel='iters')  
+ax[1].set_title(r'$\lambda$',fontdict= { 'fontsize': 18, 'fontweight':'bold'})  
+# plt.plot(lamb_save)
+# plt.show()
         
 
     
