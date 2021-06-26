@@ -48,6 +48,9 @@ N=T
 explode_corr = {'Bitcoin': 3, 'LINK':3.85, 'ETH':  3.5, 'ADA':3 }
 plot_explode = {'Bitcoin': 0, 'LINK':0 , 'ETH':  0, 'ADA':0 }
 
+#initialize RMSE
+RMSE = {}
+
 # Create empty vectors to store the simulated values
 cryptoNames = {'Bitcoin':'Bitcoin','LINK':'Chainlink','ETH':'Ethereum','ADA':'Cardano'}
 fig, [[axis1, axis2],[axis3, axis4]] = plt.subplots(2,2,figsize=(12,7.5),constrained_layout = True)
@@ -112,34 +115,13 @@ for crypto in Ydict.keys():
     listAx[crypto].set_ylabel('Dollar price',rotation=90)
     listAx[crypto].set_title(cryptoNames[crypto],fontdict= { 'fontsize': 18, 'fontweight':'bold'})
     
-    #sns.histplot(pd.DataFrame(sim[:,[-int(np.round(T[crypto]/3)),-int(np.round(2*T[crypto]/3)),-1]],columns = [Ydict[crypto].index[[-int(np.round(T[crypto]/3)),-int(np.round(2*T[crypto]/3)),-1]]]),ax=listAx2[crypto]\
-    #            ,kde=True,stat="density",log_scale=True,color=sns.color_palette())
-    #np.mean(v_sim,axis=0)[:-1]
-    #v_sim[999,:][:-1]
-    #pd.Series(v_sim[np.where(v_sim==max(np.max(v_sim,axis=1)))[0][0],:-1],index=Ydict[crypto].index, name ="Mean volatility "+crypto).plot(ax=   listAx2[crypto])       
+    #RMSE
+    RMSE[crypto] =np.sqrt(np.mean((np.mean(sim,axis=0)-P[crypto])**2))
+ 
     pd.DataFrame(v_sim[np.where(np.max(v_sim,axis=1)>=plot_explode[crypto])[0][:5],:-1].T,index=Ydict[crypto].index).plot(ax=   listAx2[crypto],colormap=sns.color_palette("flare", as_cmap=True),legend=False)       
-    #pd.DataFrame(v_sim[np.where(np.min(v_sim,axis=1)<=plot_explode[crypto])[0][:2],:-1].T,index=Ydict[crypto].index).plot(ax=   listAx2[crypto])       
-      
+
     listAx2[crypto].hlines(np.std(Ydict[crypto]),xmin=-0,xmax=Ydict[crypto].index.size)
-    #pd.Series(v_sim[np.where(v_sim==max(np.max(v_sim,axis=1)))[0][0],:-1],index=Ydict[crypto].index, name ="Mean volatility "+crypto).plot(ax=axis11)       
-    
-    #listAx2[crypto].vlines(np.mean(sim[:,[-int(np.round(T[crypto]/3)),-int(np.round(2*T[crypto]/3)),-1]],axis=0)\
-    #                       ,ymin=0,ymax=0.4,colors=sns.color_palette())
-    #sim[:,[-int(np.round(T[crypto]/3)),-int(np.round(2*T[crypto]/3)),-1]]
     listAx2[crypto].set(xlabel=None)
     listAx2[crypto].set(ylabel="Volatility")
     listAx2[crypto].set_title(cryptoNames[crypto],fontdict= { 'fontsize': 18, 'fontweight':'bold'})
 fig2
-    
-    #pd.Series(S,index=btc_price.index[:-1].T).plot(figsize=(10,7))
-    #btc_price.plot(figsize=(10,7))
-    #pd.Series(v_sim[867,:],index=btc_price.index[:-1].T).plot(figsize=(10,7))
-    #pd.Series(btc_sim[867,:],index=btc_price.index[:-1].T).plot(figsize=(10,7))
-    
-    #pd.Series(np.mean(v_sim,axis=0),index=btc_price.index[:-1].T).plot(figsize=(10,7))
-# pd.Series(np.mean(v_sim,axis=0)[:-1],index=Ydict[crypto].index.T).plot(figsize=(10,7))
-# pd.Series(v_sim[np.where(v_sim==min(np.max(v_sim,axis=1)))[0][0],:-1],index=Ydict[crypto].index).plot(figsize=(10,7))
-    
-    # plt.hist(np.log(btc_sim[:,-1]),bins=500)
-    # plt.show()
-    
