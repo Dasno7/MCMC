@@ -11,12 +11,10 @@ import scipy.stats as stats
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 import datetime
-# from math import gamma
-#from multiprocess import Pool
 
 
 #BTC price data
-btc_data = pd.read_csv("Crypto Data Repo/Bitcoin Historical Data.csv")
+btc_data = pd.read_csv("Bitcoin Historical Data.csv")
 btc_price =  np.flip(pd.Series(btc_data['Price'].str.replace(',','').astype(float)))
 btc_price.index = np.flip(btc_data['Date'])
 Y = np.log(btc_price/btc_price.shift(1))[1:]*np.sqrt(365) #return process Y
@@ -84,15 +82,15 @@ g=0;G=4 #rho_j
 #V_min1 = pd.Series(np.append(V[0],np.array(V.shift(1)[1:])),index= V.index)
 sigma2_v=D/(d-1)
 alpha=b;beta=c;m=a;rho=0;
-#r,R = get_hyperGamma(Y[np.where(J==1)[0]],5) #hyper of mu_v
+r,R = get_hyperGamma(Y[np.where(J==1)[0]],5) #hyper of mu_v
 r=10;R=20
 mu_v = (R/(r-1))
 xi_v = np.random.exponential(mu_v,T)
 rho_j=0
 mu_s = e
 xi_s = np.random.normal(e+rho_j*xi_v,E**0.5)*J
-#h,H = get_hyperGamma(Y[np.where(J==1)[0]],int(np.round(np.where(J==1)[0].shape[0]/5)))
-h=10;H=40
+h,H = get_hyperGamma(Y[np.where(J==1)[0]],int(np.round(np.where(J==1)[0].shape[0]/5)))
+#h=10;H=40
 sigma2_s = (H/(h-1))
 
 #Initialize saving parameters for MC
@@ -256,6 +254,8 @@ for i in tqdm(range(N)):
         
     #xi_v     (improve by vectorizing?)
     Jindex = np.where(J==1)[0] 
+    Jnot = np.where(J==0)[0] 
+    xi_v[Jnot] = np.random.exponential(mu_v,T,xi_v[Jnot].size)
     if Jindex.size != 0:
         for j in Jindex:
          eY = Y[j]-m-xi_s[j]
@@ -269,13 +269,14 @@ for i in tqdm(range(N)):
              
          
     #xi_s (improve by vectorizing?)
+    xi_s[Jnot] = np.random.normal(mu_s,sigma2_s**0.5,xi_s[Jnot].size)
     if Jindex.size != 0:
         for j in Jindex:
             sigma2_s_star = 1/(1/sigma2_s+1/((1-rho**2)*V_min1[j]))
             eY = Y[j]-m
             eV = V[j]-alpha-V_min1[j]*beta-xi_v[j]
-            mu_s_star = sigma2_s_star*((mu_v+rho_j*xi_v[j])/(sigma2_s)+(eY-rho/sigma2_v**0.5*eV)/((1-rho**2)*V_min1[j]))
-            xi_s[j] = np.random.normal(mu_s_star+rho_j*xi_s[j],sigma2_s_star)
+            mu_s_star = sigma2_s_star*((mu_s+rho_j*xi_v[j])/(sigma2_s)+(eY-rho/sigma2_v**0.5*eV)/((1-rho**2)*V_min1[j]))
+            xi_s[j] = np.random.normal(mu_s_star+rho_j*xi_v[j],sigma2_s_star**0.5)
     if i>burn:
         xi_s_tot += xi_s
     
@@ -331,13 +332,7 @@ for i in tqdm(range(N)):
     
     if i>burn: Vtot+= V
     if i>np.floor(burn/2)-100 or i < np.floor(burn/2):   Vtot2 += V
-    
-    
-# #speed up calculations
-# pool4 = Pool(processes=4)
-# result_list = list(tqdm(pool4.imap_unordered(Bootstrap, arglist), total=REP))
-# pool4.close()
-# pool4.join()    
+      
     
 #MC estimates
 def MC_results(N, burn, tot, tot2):

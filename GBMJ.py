@@ -129,6 +129,8 @@ for i in tqdm(range(N)):
         
     #Jump size
     Jindex = np.where(J==1)[0]
+    Jnot = np.where(J==0)[0]
+    xi[Jnot] = np.random.normal(m_j,sigma2_j**0.5,xi[Jnot].size)
     if Jindex.size != 0:
         for j in Jindex:
             Z_star = 1/(1/sigma2_j+1/sigma2)
@@ -155,21 +157,14 @@ ax = pd.Series(J_result*xi_result,index=Y.index).plot(figsize=(12,3.75)\
 ax.set(xlabel=None)
 ax.set_title('Bitcoin return jumps',fontdict= { 'fontsize': 18, 'fontweight':'bold'})
 
-    
-#     plt.plot(J_result*xi_result)
-
-
 fig, ax = plt.subplots(1,2,figsize=(12,3.75),constrained_layout=True)
 sns.lineplot(data=sigma2J_save,ax=ax[0])
 ax[0].set_title(r'$\sigma_J^2$',fontdict= { 'fontsize': 18, 'fontweight':'bold'})
-# ax1[0] = sns.lineplot(data=pd.merge(pd.Series(sigma2J_save,name=r'\sigma_J^2'),pd.Series(lamb_save,name=r'\lambda')\
-#          ,left_index=True,right_index=True))
 ax[0].set(xlabel='iters')
 sns.lineplot(data=lamb_save,ax=ax[1])  
 ax[1].set(xlabel='iters')  
 ax[1].set_title(r'$\lambda$',fontdict= { 'fontsize': 18, 'fontweight':'bold'})  
-# plt.plot(lamb_save)
-# plt.show()
+
         
 
     
