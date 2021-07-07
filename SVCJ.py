@@ -14,7 +14,7 @@ import datetime
 
 
 #BTC price data
-btc_data = pd.read_csv("Bitcoin Historical Data.csv")
+btc_data = pd.read_csv("Crypto Data Repo/Bitcoin Historical Data.csv")
 btc_price =  np.flip(pd.Series(btc_data['Price'].str.replace(',','').astype(float)))
 btc_price.index = np.flip(btc_data['Date'])
 Y = np.log(btc_price/btc_price.shift(1))[1:]*np.sqrt(365) #return process Y
@@ -82,16 +82,16 @@ g=0;G=4 #rho_j
 #V_min1 = pd.Series(np.append(V[0],np.array(V.shift(1)[1:])),index= V.index)
 sigma2_v=D/(d-1)
 alpha=b;beta=c;m=a;rho=0;
-r,R = get_hyperGamma(Y[np.where(J==1)[0]],5) #hyper of mu_v
+#r,R = get_hyperGamma(Y[np.where(J==1)[0]],5) #hyper of mu_v
 r=10;R=20
 mu_v = (R/(r-1))
 xi_v = np.random.exponential(mu_v,T)
 rho_j=0
 mu_s = e
 xi_s = np.random.normal(e+rho_j*xi_v,E**0.5)*J
-h,H = get_hyperGamma(Y[np.where(J==1)[0]],int(np.round(np.where(J==1)[0].shape[0]/5)))
-#h=10;H=40
-sigma2_s = (H/(h-1))
+#h,H = get_hyperGamma(Y[np.where(J==1)[0]],int(np.round(np.where(J==1)[0].shape[0]/5)))
+h=10;H=40
+sigma2_s = 0.01#(H/(h-1))
 
 #Initialize saving parameters for MC
 mtot=0;mtot2=0 #drawing mu
@@ -103,8 +103,8 @@ mVtot = 0; mVtot2=0 #muV
 rho_jtot=0;rho_jtot2=0 #rho_j
 Jtot=0
 xi_s_tot=0;xi_v_tot=0
-dfSigV = 3; stdV=0.9;acceptPropSig=0;sigma2_vtot=0; sigma2_vtot2=0
-stdRho = 0.005; dfRho = 6.5;acceptPropRho = 0;rhotot=0;rhotot2=0 #drawing rho
+acceptPropSig=0;sigma2_vtot=0; sigma2_vtot2=0
+stdRho = 0.01; dfRho = 6.5;acceptPropRho = 0;rhotot=0;rhotot2=0 #drawing rho
 dfV = 4.5; stdV=0.9; Vtot=0;Vtot2=0;acceptPropV=np.zeros(T)
 
 
@@ -255,7 +255,7 @@ for i in tqdm(range(N)):
     #xi_v     (improve by vectorizing?)
     Jindex = np.where(J==1)[0] 
     Jnot = np.where(J==0)[0] 
-    xi_v[Jnot] = np.random.exponential(mu_v,T,xi_v[Jnot].size)
+    xi_v[Jnot] = np.random.exponential(mu_v,xi_v[Jnot].size)
     if Jindex.size != 0:
         for j in Jindex:
          eY = Y[j]-m-xi_s[j]
