@@ -6,12 +6,14 @@ Created on Thu May  6 01:18:15 2021
 """
 import numpy as np
 import pandas as pd
+import scipy.stats as stats
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import datetime
 import seaborn as sns
 
 #price data
+sns.set_theme(style='darkgrid')
 cryptos = ['Bitcoin','LINK','ETH','ADA']
 #cryptos=['Bitcoin']
 Y={}
@@ -45,8 +47,9 @@ def stock_path_sim(N,TT,S_0,mu,sigma2):
     S = S_0*np.exp((mu)*t+(sigma2)**0.5*W)
     return S
 
-#initialize RMSE
+#initialize RMSE and empirical forecasting density
 RMSE = {}
+densityEnd = {}
 
 cryptoNames = {'Bitcoin':'Bitcoin','LINK':'Chainlink','ETH':'Ethereum','ADA':'Cardano'}
 fig, [[axis1, axis2],[axis3, axis4]] = plt.subplots(2,2,figsize=(12,7.5),constrained_layout = True)
@@ -66,7 +69,7 @@ for crypto in Y.keys():
          P[crypto],left_index=True,right_index=True).plot(figsize=(10,7),loglog=True,ax=listAx[crypto])
     listAx[crypto].set(xlabel=None)
     listAx[crypto].set_title(cryptoNames[crypto],fontdict= { 'fontsize': 18, 'fontweight':'bold'})
-    
+    densityEnd[crypto] = (pd.DataFrame(sim[:,[-2,-1]],columns = [Y[crypto].index[[-2,-1]]]))
     sns.histplot(pd.DataFrame(sim[:,[-int(np.round(T[crypto]/3)),-int(np.round(2*T[crypto]/3)),-1]],columns = [Y[crypto].index[[-int(np.round(T[crypto]/3)),-int(np.round(2*T[crypto]/3)),-1]]]),ax=listAx2[crypto]\
                  ,kde=True,stat="density",log_scale=True,color=sns.color_palette())
    
@@ -77,3 +80,19 @@ for crypto in Y.keys():
     RMSE[crypto] =np.sqrt(np.mean((np.mean(sim,axis=0)-P[crypto])**2))
 print(RMSE)
 fig2
+
+
+def getParamForecastingDensity(densityDict,cryptos):
+    dictMean={}
+    dictVar={}
+    for crypto in cryptos:
+        score = np.log(np.array(densityEnd[crypto][densityEnd[crypto].columns[1][0]])/np.array(densityEnd[crypto][densityEnd[crypto].columns[0][0]]))
+        dictMean[crypto] =np.mean(score*365) 
+        dictVar[crypto] = np.var(score*np.sqrt(365))
+        
+    return dictMean,dictVar
+
+dictMean,dictVar = getParamForecastingDensity(densityEnd,cryptos)
+# test = np.log(np.array(densityEnd['Bitcoin'][densityEnd['Bitcoin'].columns[1][0]])/np.array(densityEnd['Bitcoin'][densityEnd['Bitcoin'].columns[0][0]]))
+
+# print(np.mean(test*365),np.var(test*np.sqrt(365)))

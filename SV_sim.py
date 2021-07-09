@@ -48,8 +48,9 @@ N=T
 explode_corr = {'Bitcoin': 3, 'LINK':3.85, 'ETH':  3.5, 'ADA':3 }
 plot_explode = {'Bitcoin': 0, 'LINK':0 , 'ETH':  0, 'ADA':0 }
 
-#initialize RMSE
+#initialize RMSE and empirical forecasting density
 RMSE = {}
+densityEnd = {}
 
 # Create empty vectors to store the simulated values
 cryptoNames = {'Bitcoin':'Bitcoin','LINK':'Chainlink','ETH':'Ethereum','ADA':'Cardano'}
@@ -115,6 +116,9 @@ for crypto in Ydict.keys():
     listAx[crypto].set_ylabel('Dollar price',rotation=90)
     listAx[crypto].set_title(cryptoNames[crypto],fontdict= { 'fontsize': 18, 'fontweight':'bold'})
     
+    #Return forecasting density 
+    densityEnd[crypto] = (pd.DataFrame(sim[:,[-2,-1]],columns = [Ydict[crypto].index[[-2,-1]]]))
+   
     #RMSE
     RMSE[crypto] =np.sqrt(np.mean((np.mean(sim,axis=0)-P[crypto])**2))
  
@@ -125,3 +129,15 @@ for crypto in Ydict.keys():
     listAx2[crypto].set(ylabel="Volatility")
     listAx2[crypto].set_title(cryptoNames[crypto],fontdict= { 'fontsize': 18, 'fontweight':'bold'})
 fig2
+
+def getParamForecastingDensity(densityDict,cryptos):
+    dictMean={}
+    dictVar={}
+    for crypto in cryptos:
+        score = np.log(np.array(densityEnd[crypto][densityEnd[crypto].columns[1][0]])/np.array(densityEnd[crypto][densityEnd[crypto].columns[0][0]]))
+        dictMean[crypto] =np.mean(score*365) 
+        dictVar[crypto] = np.var(score*np.sqrt(365))
+        
+    return dictMean,dictVar
+
+dictMean,dictVar = getParamForecastingDensity(densityEnd,cryptos)
