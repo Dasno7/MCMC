@@ -5,7 +5,33 @@ Created on Sun Jul 11 18:51:02 2021
 @author: Dasno7
 """
 import numpy as np
+import scipy.stats as stats
+import matplotlib.pyplot as plt
+
 cryptos = ['Bitcoin']#,'LINK','ETH','ADA']
+
+# Geometric Brownian Motion
+m ={'Bitcoin': 0.02817135116188635, 'LINK': 0.06792776181895642, 'ETH': 0.028163787262985164, 'ADA': 0.026269044494565446}#/np.sqrt(365)
+sigma2_y = {'Bitcoin': 0.6945836313141901, 'LINK': 1.8381271048871903, 'ETH': 1.123005248647937, 'ADA': 1.3440624591240018}#/np.sqrt(365)
+
+S=34
+K=36
+T=100
+
+def putOptionPriceAnalytical(S0, K, T, r, sigma):
+    d1 = (np.log(S0 / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
+    d2 = (np.log(S0 / K) + (r - 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
+    N_d1 = stats.norm.cdf(-d1)
+    N_d2 = stats.norm.cdf(-d2)
+
+    europePutAnalytical = K * np.exp(-r * T) * N_d2 - S0 * N_d1
+    return europePutAnalytical
+
+for crypto in cryptos:
+    price = putOptionPriceAnalytical(S,K,T,m[crypto],sigma2_y[crypto])
+    print(price)
+
+# Heston model
 mu ={'Bitcoin': 0.02029249494235486, 'LINK':0.04698867505564754, 'ETH':  0.01583345207967061, 'ADA':-0.003431383092799574 }
 s2V = {'Bitcoin': 0.04033712521749577, 'LINK':0.18696787354715597 , 'ETH': 0.09823061919130012, 'ADA':0.13299513034831426 }
 alpha ={'Bitcoin':  0.027300605314312377, 'LINK':0.1939941460600538, 'ETH': 0.0927768090812799, 'ADA': 0.1500259628758315}
@@ -19,10 +45,10 @@ S=34
 v=1.5/np.sqrt(365)
 
 a=0.01
-b=10000
+b=1000
 K=36
 
-M=int(5e5)
+M=int(5e2)
 for crypto in cryptos:
     def fi_heston(x):
         d = np.sqrt(s2V[crypto]*(1j*x+x**2)+(rho[crypto]*s2V[crypto]**(0.5)*1j*x-kappa[crypto])**2)
@@ -45,7 +71,13 @@ for crypto in cryptos:
         putEst = g0+ np.array([2*gn(i)*np.exp(-np.pi*a*i*1j/(b-a))*fi_heston(np.pi*i/(b-a)) for i in range(1,M+1)]).sum()
         return putEst.real/(b-a)
     
+    #print(f(M))
     test = np.array([f(t) for t in range(1,M)])
+    plt.plot(test)
+    plt.xlabel('Number of series expansions')
+    plt.ylabel('Put value in thousands dollars')
+    #plt.title('Fourier series convergence')
+    
     # def cn(n):
     #     c = y*np.exp(-1j*2*n*np.pi*time/period)
     #     return c.sum()/c.size
