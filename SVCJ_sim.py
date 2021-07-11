@@ -11,8 +11,9 @@ from tqdm import tqdm
 import seaborn as sns
 
 #price data
+sns.set_theme(style='darkgrid')
 #cryptos = ['Bitcoin','LINK','ETH','ADA']
-cryptos=['Bitcoin']
+cryptos=['Bitcoin','ETH']
 Ydict={}
 T={}
 P ={}
@@ -62,7 +63,7 @@ rhoJ = {'Bitcoin': -0.17421779430559128 , 'LINK':-0.0850455673163998 , 'ETH':  -
 N=T
 
 #explode_corr = {'Bitcoin': 2, 'LINK':80, 'ETH':  50, 'ADA':20 }
-explode_corr = {'Bitcoin': 3, 'LINK':3.85, 'ETH':  3.5, 'ADA':3 }
+explode_corr = {'Bitcoin': 2, 'LINK':3.85, 'ETH':  2.5, 'ADA':3 }
 plot_explode = {'Bitcoin': 0, 'LINK':0 , 'ETH':  0, 'ADA':0 }
 
 #initialize RMSE and empirical forecasting density
@@ -72,9 +73,11 @@ densityEnd = {}
 # Create empty vectors to store the simulated values
 cryptoNames = {'Bitcoin':'Bitcoin','LINK':'Chainlink','ETH':'Ethereum','ADA':'Cardano'}
 fig, [[axis1, axis2],[axis3, axis4]] = plt.subplots(2,2,figsize=(12,7.5),constrained_layout = True)
-fig2,  [axis12, axis22,axis32, axis42] = plt.subplots(4,1,figsize=(12,15),constrained_layout = True)
+#fig2,  [axis12, axis22,axis32, axis42] = plt.subplots(4,1,figsize=(12,15),constrained_layout = True)
+fig2,  [axis12, axis22] = plt.subplots(2,1,figsize=(12,7.5),constrained_layout = True)
 listAx = {'Bitcoin':axis1,'LINK':axis2,'ETH':axis3,'ADA':axis4}
-listAx2 = {'Bitcoin':axis12,'LINK':axis22,'ETH':axis32,'ADA':axis42}
+#listAx2 = {'Bitcoin':axis12,'LINK':axis22,'ETH':axis32,'ADA':axis42}
+listAx2 = {'Bitcoin':axis12,'ETH':axis22}
 for crypto in Ydict.keys():
     V    = np.zeros(N[crypto]+1)  # Volatility of log return
     v    = np.zeros(N[crypto]+1)  # sqrt Volatility of log return

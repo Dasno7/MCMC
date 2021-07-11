@@ -11,6 +11,7 @@ from tqdm import tqdm
 import seaborn as sns
 
 #price data
+sns.set_theme(style='darkgrid')
 cryptos = ['Bitcoin','LINK','ETH','ADA']
 #cryptos=['Bitcoin']
 Ydict={}

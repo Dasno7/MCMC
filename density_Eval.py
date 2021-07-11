@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import datetime
 import seaborn as sns
+import statsmodels.tsa.stattools as ts
 
 #price data
 cryptos = ['Bitcoin','LINK','ETH','ADA']
@@ -39,14 +40,15 @@ def censoredLikScore(y,mu,sigma2,r):
     w = np.zeros(logfhat.shape[0])
     w[np.where(y <= r)[0]]=1 # or len np.where
     
-    score = w*logfhat+(1-w)*(1-wlogfhat)
+    score = w*logfhat+(1-w)*np.log((1-wlogfhat))
 
     return score
 
 # GBM
 m ={'Bitcoin': 0.02817135116188635, 'LINK': 0.06792776181895642, 'ETH': 0.028163787262985164, 'ADA': 0.026269044494565446}#/np.sqrt(365)
 sigma2_y = {'Bitcoin': 0.6945836313141901, 'LINK': 1.8381271048871903, 'ETH': 1.123005248647937, 'ADA': 1.3440624591240018}#/np.sqrt(365)
-r = {'Bitcoin': -1, 'LINK': -2, 'ETH': -1.5, 'ADA': -1.7}#/np.sqrt(365)
+#r = {'Bitcoin': -1, 'LINK': -2, 'ETH': -1.5, 'ADA': -1.7}#/np.sqrt(365)
+r = {'Bitcoin': 1, 'LINK': 2, 'ETH': 1.5, 'ADA': 1.7}#/np.sqrt(365)
 
 scoreGBM={}
 scoreMeanGBM={}
@@ -84,3 +86,60 @@ scoreMeanSVCJ={}
 for crypto in cryptos:
     scoreSVCJ[crypto] = censoredLikScore(Y[crypto],m[crypto],sigma2_y[crypto],r[crypto])
     scoreMeanSVCJ[crypto] = np.mean(scoreSVCJ[crypto])
+    
+    
+# Testing
+
+
+def predictAbilityTest(scoreVec1,scoreVec2,n,m):
+    d = scoreVec1-scoreVec2
+    d_bar = np.sum(d)/n
+    K = np.floor(n**(0.25))
+    a = 1-np.arange(1,K)/K
+    gamma_hat = ts.acovf(d,nlag=K-1,fft=True)
+    sigma2_mn = np.abs(gamma_hat[0]**2+2*np.sum(a*gamma_hat[1:]))
+    t_mn = d_bar/np.sqrt(sigma2_mn/n)
+    
+    alpha=np.array([0.1,0.05,0.01])
+    sign = ['*','**','***']
+    checksign = np.where(np.abs(t_mn)>stats.norm.ppf(1-alpha))[0]
+    if checksign.size==0:
+        signLevel = ''
+    else:
+        signLevel= sign[max(checksign)]
+    return str(t_mn)+signLevel
+
+cryptos = ['Bitcoin','LINK','ETH','ADA']
+crypto='ADA'
+n =  {'Bitcoin': 1369, 'LINK': 713, 'ETH': 1381, 'ADA': 1130}
+m=Y[crypto].size
+
+# GBM
+gbmTest = []
+gbmTest.append(0)
+gbmTest.append(predictAbilityTest(scoreGBM[crypto],scoreSV[crypto],n[crypto],m))
+gbmTest.append(predictAbilityTest(scoreGBM[crypto],scoreGBMJ[crypto],n[crypto],m))
+gbmTest.append(predictAbilityTest(scoreGBM[crypto],scoreSVCJ[crypto],n[crypto],m))
+
+# SVCJ
+svTest = []
+svTest.append(predictAbilityTest(scoreSV[crypto],scoreGBM[crypto],n[crypto],m))
+svTest.append(0)
+svTest.append(predictAbilityTest(scoreSV[crypto],scoreGBMJ[crypto],n[crypto],m))
+svTest.append(predictAbilityTest(scoreSV[crypto],scoreSVCJ[crypto],n[crypto],m))
+
+# GBMJ
+gbmjTest = []
+gbmjTest.append(predictAbilityTest(scoreGBMJ[crypto],scoreGBM[crypto],n[crypto],m))
+gbmjTest.append(predictAbilityTest(scoreGBMJ[crypto],scoreSV[crypto],n[crypto],m))
+gbmjTest.append(0)
+gbmjTest.append(predictAbilityTest(scoreGBMJ[crypto],scoreSVCJ[crypto],n[crypto],m))
+
+# SVCJ
+svcjTest = []
+svcjTest.append(predictAbilityTest(scoreSVCJ[crypto],scoreGBM[crypto],n[crypto],m))
+svcjTest.append(predictAbilityTest(scoreSVCJ[crypto],scoreSV[crypto],n[crypto],m))
+svcjTest.append(predictAbilityTest(scoreSVCJ[crypto],scoreGBMJ[crypto],n[crypto],m))
+svcjTest.append(0)
+
+test = pd.DataFrame([gbmTest,svTest,gbmjTest,svcjTest]).T

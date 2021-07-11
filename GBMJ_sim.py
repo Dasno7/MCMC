@@ -12,6 +12,7 @@ import datetime
 import seaborn as sns
 
 #price data
+sns.set_theme(style='darkgrid')
 cryptos = ['Bitcoin','LINK','ETH','ADA']
 Y={}
 T={}
