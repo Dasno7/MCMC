@@ -15,8 +15,8 @@ import seaborn as sns
 from matplotlib import rc
 
 #BTC price data
-btc_data = pd.read_csv("Crypto Data Repo/LINK Historical Data.csv")
-btc_price = np.flip(pd.Series(btc_data['Price']))#.str.replace(',','').astype(float)))
+btc_data = pd.read_csv("Crypto Data Repo/Bitcoin Historical Data.csv")
+btc_price = np.flip(pd.Series(btc_data['Price'].str.replace(',','').astype(float)))
 btc_price.index = np.flip(btc_data['Date'])
 Y = np.log(btc_price/btc_price.shift(1))[1:]*np.sqrt(365) #return process Y
 #Y = ((btc_price-btc_price.shift(1))/btc_price.shift(1))[1:]
