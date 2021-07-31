@@ -212,138 +212,144 @@ priceData161120BTC[strikeBTC.name]=strikeBTC.copy()
 priceData161120BTC[optionType.name]=optionType.copy()
 priceData161120BTC.dropna(inplace=True)
 
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ## Plotting functions
+
 def make_surf(X,Y,Z):
+   XX,YY = np.meshgrid(np.linspace(min(X),max(X),2300),np.linspace(min(Y),max(Y),2300))
+   ZZ = griddata(np.array([X,Y]).T,np.array(Z),(XX,YY), method='linear')
+   return XX,YY,ZZ 
+
+def make_surf_simple(X,Y,Z):
    XX,YY = np.meshgrid(np.linspace(min(X),max(X),230),np.linspace(min(Y),max(Y),230))
    ZZ = griddata(np.array([X,Y]).T,np.array(Z),(XX,YY), method='linear')
    return XX,YY,ZZ 
 
-
-def mesh_plotBTC(fig,ax,title,X,Y,Z):
-   #fig = plt.figure()
-   #ax = Axes3D(fig, azim = -29, elev = 50)
-   XX,YY,ZZ = make_surf(X,Y,Z)
+def mesh_plotBTC_Call(fig,ax,title,X,Y,Z):
+   XX,YY,ZZ = make_surf_simple(X,Y,Z)
    np.nan_to_num(ZZ[:,135:],copy=False,nan=0)
    ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=1000,limit_direction='both'))
    XX=XX[:,50:200];YY=YY[:,50:200];ZZ=ZZ[:,50:200]
-   XX=XX[12:,:];YY=YY[12:,:];ZZ=ZZ[12:,:]   
+   XX=XX[12:,:];YY=YY[12:,:];ZZ=ZZ[12:,:] 
    my_cmap = plt.get_cmap('plasma') 
-   # surf = ax.plot_surface(XX,YY,ZZ, cmap = my_cmap, edgecolor ='none')
-   # fig.colorbar(surf, ax = ax, shrink = 0.7, aspect = 7)
    surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=25, cstride=16,
                         edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=0, vcenter=0.25, vmax=0.5))
-   #fig.colorbar(surf, ax = ax, shrink = 0.7, aspect = 7)
-   #ax.plot_surface(XX,YY,ZZ, color = 'white')
-   #ax.contour(XX,YY,ZZ)
    ax.set_title(title, fontdict= { 'fontsize': 18},style='italic')
-   #ax.view_init(33, 45)
-   #plt.ylabel("T")
-   #plt.xlabel("K/S") 
    return ax
-   
-def mesh_plotBTC_C(fig,ax,title,X,Y,Z):
-   #fig = plt.figure()
-   #ax = Axes3D(fig, azim = -29, elev = 50)
-   XX,YY,ZZ = make_surf(X,Y,Z)
-   np.nan_to_num(ZZ[:,93:],copy=False,nan=0)
+
+def mesh_plotBTC_Call2(fig,ax,title,X,Y,Z):
+   XX,YY,ZZ = make_surf_simple(X,Y,Z)
    ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=1000,limit_direction='both'))
    XX=XX[:,40:];YY=YY[:,40:];ZZ=ZZ[:,40:]
-   XX=XX[20:,:];YY=YY[20:,:];ZZ=ZZ[20:,:]  
+   XX=XX[20:,:];YY=YY[20:,:];ZZ=ZZ[20:,:]
    my_cmap = plt.get_cmap('plasma') 
-   # surf = ax.plot_surface(XX,YY,ZZ, cmap = my_cmap, edgecolor ='none')
-   # fig.colorbar(surf, ax = ax, shrink = 0.7, aspect = 7)
    surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=25, cstride=16,
                         edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=0, vcenter=0.25, vmax=0.5))
-   #fig.colorbar(surf, ax = ax, shrink = 0.7, aspect = 7)
-   #ax.plot_surface(XX,YY,ZZ, color = 'white')
-   #ax.contour(XX,YY,ZZ)
    ax.set_title(title, fontdict= { 'fontsize': 18},style='italic')
-   #ax.view_init(33, 45)
-   #plt.ylabel("T")
-   #plt.xlabel("K/S") 
+   return surf
+
+def mesh_plotBTC(fig,ax,title,X,Y,Z):
+   XX,YY,ZZ = make_surf(X,Y,Z)
+   np.nan_to_num(ZZ[:,1350:],copy=False,nan=0)
+   ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=10000,limit_direction='both'))
+   XX=XX[:,500:1700];YY=YY[:,500:1700];ZZ=ZZ[:,500:1700]
+   XX=XX[150:,:];YY=YY[150:,:];ZZ=ZZ[150:,:]   
+   my_cmap = plt.get_cmap('plasma') 
+   surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=250, cstride=160,
+                        edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=0, vcenter=0.25, vmax=0.5))
+   ax.set_title(title, fontdict= { 'fontsize': 18},style='italic')
+   return ax
+
+   
+def mesh_plotBTC_P(fig,ax,title,X,Y,Z):
+   XX,YY,ZZ = make_surf(X,Y,Z)
+   np.nan_to_num(ZZ[:,930:],copy=False,nan=0)
+   ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=10000,limit_direction='both'))
+   XX=XX[:,500:2000];YY=YY[:,500:2000];ZZ=ZZ[:,500:2000]
+   XX=XX[170:,:];YY=YY[170:,:];ZZ=ZZ[170:,:] 
+   my_cmap = plt.get_cmap('plasma') 
+   surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=250, cstride=160,
+                        edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=0, vcenter=0.25, vmax=0.5))
+   ax.set_title(title, fontdict= { 'fontsize': 18},style='italic')
+   ax.view_init(33, 230)
+   return surf
+
+   
+def mesh_plotBTC_P1(fig,ax,title,X,Y,Z):
+   XX,YY,ZZ = make_surf(X,Y,Z)
+   np.nan_to_num(ZZ[:,930:],copy=False,nan=0)
+   ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=10000,limit_direction='both'))
+   XX=XX[:,500:1700];YY=YY[:,500:1700];ZZ=ZZ[:,500:1700]
+   XX=XX[240:,:];YY=YY[240:,:];ZZ=ZZ[240:,:] 
+   my_cmap = plt.get_cmap('plasma') 
+   surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=250, cstride=160,
+                        edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=0, vcenter=0.25, vmax=0.5))
+   ax.set_title(title, fontdict= { 'fontsize': 18},style='italic')
+   ax.view_init(33, 230) 
    return surf
    
-def mesh_plotETH(fig,ax,title,X,Y,Z):
-   # fig = plt.figure()
-   # ax = Axes3D(fig, azim = -29, elev = 50)
-   XX,YY,ZZ = make_surf(X,Y,Z)
+def mesh_plotETH_Call(fig,ax,title,X,Y,Z):
+   XX,YY,ZZ = make_surf_simple(X,Y,Z)
    np.nan_to_num(ZZ[:,135:],copy=False,nan=0)
-   ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=1000,limit_direction='both'))
+   ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=100,limit_direction='both'))
    XX=XX[:,50:196];YY=YY[:,50:196];ZZ=ZZ[:,50:196]
    XX=XX[12:,:];YY=YY[12:,:];ZZ=ZZ[12:,:]   
    my_cmap = plt.get_cmap('plasma') 
-   # surf = ax.plot_surface(XX,YY,ZZ, cmap = my_cmap, edgecolor ='none')
-   # fig.colorbar(surf, ax = ax, shrink = 0.7, aspect = 7)
    surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=25, cstride=16,
                         edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=0, vcenter=0.25, vmax=0.5))
-   # fig.colorbar(surf, ax = ax, shrink = 0.7, aspect = 7)
-   #ax.plot_surface(XX,YY,ZZ, color = 'white')
-   #ax.contour(XX,YY,ZZ)
    ax.set_title(title, fontdict= { 'fontsize': 18},style='italic')
-   #ax.view_init(33, 45)
-   # plt.ylabel("T")
-   # plt.xlabel("K/S") 
    return ax
    
-def mesh_plotETH_C(fig,ax,title,X,Y,Z):
-   # fig = plt.figure()
-   # ax = Axes3D(fig, azim = -29, elev = 50)
-   XX,YY,ZZ = make_surf(X,Y,Z)
+def mesh_plotETH_Call2(fig,ax,title,X,Y,Z):
+   XX,YY,ZZ = make_surf_simple(X,Y,Z)
    np.nan_to_num(ZZ[:,100:],copy=False,nan=0)
-   ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=1000,limit_direction='both'))
+   ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=100,limit_direction='both'))
    XX=XX[:,40:];YY=YY[:,40:];ZZ=ZZ[:,40:]
    XX=XX[20:,:];YY=YY[20:,:];ZZ=ZZ[20:,:]   
    my_cmap = plt.get_cmap('plasma') 
-   # surf = ax.plot_surface(XX,YY,ZZ, cmap = my_cmap, edgecolor ='none')
-   # fig.colorbar(surf, ax = ax, shrink = 0.7, aspect = 7)
    surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=25, cstride=16,
                         edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=0, vcenter=0.25, vmax=0.5))
-   # fig.colorbar(surf, ax = ax, shrink = 0.7, aspect = 7)
-   #ax.plot_surface(XX,YY,ZZ, color = 'white')
-   #ax.contour(XX,YY,ZZ)
    ax.set_title(title, fontdict= { 'fontsize': 18},style='italic')
-   #ax.view_init(33, 45)
    return surf
-   
-def plot3D(X,Y,Z,fig,ax):
-   ax.plot(X,Y,Z,'o', color = 'pink')
-   plt.ylabel("T")
-   plt.xlabel("K/S")
-   
-def plot3D_scatter(X,Y,Z):
-   fig = plt.figure()
-   ax = Axes3D(fig, azim = -29, elev = 50)
- 
-   ax.plot(X,Y,Z,'o')
- 
-   plt.ylabel("T")
-   plt.xlabel("K/S")
-   plt.show()
-   
-def mesh_plot3(X,Y,Z,fig,ax):
-   XX,YY,ZZ = make_surf(X,Y,Z)
-   np.nan_to_num(ZZ[:,135:],copy=False,nan=0)
-   ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=1000,limit_direction='both'))
-   XX=XX[:,50:190];YY=YY[:,50:190];ZZ=ZZ[:,50:190]
-   XX=XX[12:,:];YY=YY[12:,:];ZZ=ZZ[12:,:]   
-   my_cmap = plt.get_cmap('plasma') 
-   # surf = ax.plot_surface(XX,YY,ZZ, cmap = my_cmap, edgecolor ='none')
-   # fig.colorbar(surf, ax = ax, shrink = 0.7, aspect = 7)
-   surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=25, cstride=16,
-                        edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=0, vcenter=0.25, vmax=0.5))
-   fig.colorbar(surf, ax = ax, shrink = 0.7, aspect = 7)
 
-   #ax.contour(XX,YY,ZZ)
-   plt.ylabel("T")
-   plt.xlabel("K/S")
-   
-def combine_plots(X,Y,Z):
-   fig = plt.figure()
-   ax = Axes3D(fig, azim = -29, elev = 50)
-   mesh_plot3(X,Y,Z,fig,ax)
-   plot3D(X,Y,Z,fig,ax)
-   ax.view_init(33, 45)
-   plt.show()
+def mesh_plotETH(fig,ax,title,X,Y,Z):
+   XX,YY,ZZ = make_surf(X,Y,Z)
+   np.nan_to_num(ZZ[:,1350:],copy=False,nan=0)
+   ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=10000,limit_direction='both'))
+   XX=XX[:,500:1700];YY=YY[:,500:1700];ZZ=ZZ[:,500:1700]
+   XX=XX[120:,:];YY=YY[120:,:];ZZ=ZZ[120:,:]   
+   my_cmap = plt.get_cmap('plasma') 
+   surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=250, cstride=160,
+                        edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=0, vcenter=0.25, vmax=0.5))
+   ax.set_title(title, fontdict= { 'fontsize': 18},style='italic')
+   ax.view_init(33, 230) 
+   return ax
+
+def mesh_plotETH_P(fig,ax,title,X,Y,Z):
+   XX,YY,ZZ = make_surf(X,Y,Z)
+   np.nan_to_num(ZZ[:,1350:],copy=False,nan=0)
+   ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=10000,limit_direction='both'))
+   XX=XX[:,500:1700];YY=YY[:,500:1700];ZZ=ZZ[:,500:1700]
+   XX=XX[200:,:];YY=YY[200:,:];ZZ=ZZ[200:,:]   
+   my_cmap = plt.get_cmap('plasma') 
+   surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=250, cstride=160,
+                        edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=0, vcenter=0.25, vmax=0.5))
+   ax.set_title(title, fontdict= { 'fontsize': 18},style='italic')
+   ax.view_init(33, 230) 
+   return ax
+
+def mesh_plotETH_P1(fig,ax,title,X,Y,Z):
+   XX,YY,ZZ = make_surf(X,Y,Z)
+   np.nan_to_num(ZZ[:,1000:],copy=False,nan=0)
+   ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=10000,limit_direction='both'))
+   XX=XX[:,400:1670];YY=YY[:,400:1670];ZZ=ZZ[:,400:1670]
+   XX=XX[200:,:];YY=YY[200:,:];ZZ=ZZ[200:,:]   
+   my_cmap = plt.get_cmap('plasma') 
+   surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=250, cstride=160,
+                        edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=0, vcenter=0.25, vmax=0.5))
+   ax.set_title(title, fontdict= { 'fontsize': 18},style='italic')
+   ax.view_init(33, 230) 
+   return surf
    
 # Sorting option chain
 def putOptionPriceAnalytical(S0, K, T, r, sigma):
@@ -356,13 +362,7 @@ def putOptionPriceAnalytical(S0, K, T, r, sigma):
     return europePutAnalytical
 
 def euro_vanilla_call(S, K, T, r, sigma):
-    
-    #S: spot price
-    #K: strike price
-    #T: time to maturity
-    #r: interest rate
-    #sigma: volatility of underlying asset
-    
+   
     d1 = (np.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
     d2 = (np.log(S / K) + (r - 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
     
@@ -383,133 +383,187 @@ def getOptionChain(test):
             optionChain[T] = pd.concat({'Strike':test[strikeBTC.name].loc[index], 'Call':callValues},axis = 1)
             optionChain[T] = pd.concat({'Strike':test[strikeBTC.name].loc[index], 'Call':callValues, 'Put':putValues},axis = 1)
     return optionChain
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Actual plotting
 
-#BTC
-fig, [axis1, axis2, axis3] = plt.subplots(1,3,figsize=(22.5,12), subplot_kw=dict(projection="3d",xlabel=r'$K/S$',ylabel=r'$T$',zlabel=r'$\sigma_{imp}$'),constrained_layout = True)
+#BTC CALL
+fig2, [axis12, axis22, axis32] = plt.subplots(1,3,figsize=(22.5,12), subplot_kw=dict(projection="3d",xlabel=r'$K/S$',ylabel=r'$T$',zlabel=r'$\sigma_{imp}$'),constrained_layout = True)
 
 #1
-priceData010621BTC_CALL= priceData010621BTC.where(priceData010621BTC['OptionType']=='P').dropna()
-test= priceData010621BTC_CALL.where((priceData010621BTC_CALL[strikeBTC.name]/priceData010621BTC_CALL['base_price']) <=2).dropna()
-axis1 = mesh_plotBTC(fig,axis1,"7 June 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price'])
+priceData010621BTC_CALL= priceData010621BTC.where(priceData010621BTC['OptionType']=='C').dropna()
+test= priceData010621BTC_CALL.where((priceData010621BTC_CALL[strikeBTC.name]/priceData010621BTC_CALL['base_price']) <=2.5).dropna()
+axis12 = mesh_plotBTC_Call(fig2,axis12,"7 June 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price'])
 
-optionChain = getOptionChain(test)
-np.mean(test['base_price'])
-np.sort(np.array(optionChain[4]['Strike']))
-np.sort(np.array(optionChain[53]['Strike']))
-np.sort(np.array(optionChain[109]['Strike']))
-np.sort(np.array(optionChain[207]['Strike']))
-np.sort(np.array(optionChain[291]['Strike']))
+# optionChain = getOptionChain(test)
+# np.mean(test['base_price'])
+# np.sort(np.array(optionChain[4]['Strike']))
+# np.sort(np.array(optionChain[53]['Strike']))
+# np.sort(np.array(optionChain[109]['Strike']))
+# np.sort(np.array(optionChain[207]['Strike']))
+# np.sort(np.array(optionChain[291]['Strike']))
 
-check = priceData010621BTC.where(priceData010621BTC['TimeToMaturity']==291).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
-plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
-check = priceData010621BTC.where(priceData010621BTC['TimeToMaturity']==109).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
-plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
-check = priceData010621BTC.where(priceData010621BTC['TimeToMaturity']==4).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
-plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
-plt.show()
+# check = priceData010621BTC.where(priceData010621BTC['TimeToMaturity']==291).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
+# plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
+# check = priceData010621BTC.where(priceData010621BTC['TimeToMaturity']==109).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
+# plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
+# check = priceData010621BTC.where(priceData010621BTC['TimeToMaturity']==4).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
+# plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
+# plt.show()
 
-check = priceData010621BTC.where(priceData010621BTC['Strike']==70000).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
-plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
-check = priceData010621BTC.where(priceData010621BTC['Strike']==35000).dropna().where(priceData010621BTC['OptionType']=='C').dropna().drop(index=100997)
-plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
-check = priceData010621BTC.where(priceData010621BTC['Strike']==20000).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
-plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
-plt.show()
+# check = priceData010621BTC.where(priceData010621BTC['Strike']==70000).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
+# plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
+# check = priceData010621BTC.where(priceData010621BTC['Strike']==35000).dropna().where(priceData010621BTC['OptionType']=='C').dropna().drop(index=100997)
+# plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
+# check = priceData010621BTC.where(priceData010621BTC['Strike']==20000).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
+# plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
+# plt.show()
 
 #2
 priceData120321BTC_CALL= priceData120321BTC.where(priceData120321BTC['OptionType']=='C').dropna()
 test= priceData120321BTC_CALL.where((priceData120321BTC_CALL[strikeBTC.name]/priceData120321BTC_CALL['base_price']) <=2.5).dropna()
-axis2 = mesh_plotBTC(fig,axis2,"14 March 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price'])
+axis22 = mesh_plotBTC_Call(fig2,axis22,"14 March 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price'])
 
-optionChain = getOptionChain(test)
-np.mean(test['base_price'])
-np.sort(np.array(optionChain[5]['Strike']))
-np.sort(np.array(optionChain[47]['Strike']))
-np.sort(np.array(optionChain[103]['Strike']))
-np.sort(np.array(optionChain[194]['Strike']))
-np.sort(np.array(optionChain[292]['Strike']))
+# optionChain = getOptionChain(test)
+# np.mean(test['base_price'])
+# np.sort(np.array(optionChain[5]['Strike']))
+# np.sort(np.array(optionChain[47]['Strike']))
+# np.sort(np.array(optionChain[103]['Strike']))
+# np.sort(np.array(optionChain[194]['Strike']))
+# np.sort(np.array(optionChain[292]['Strike']))
 
-check = priceData120321BTC_CALL.where(priceData120321BTC_CALL['TimeToMaturity']==292).dropna().where(priceData120321BTC_CALL['OptionType']=='C').dropna()
-plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
-check = priceData120321BTC_CALL.where(priceData120321BTC_CALL['TimeToMaturity']==103).dropna().where(priceData120321BTC_CALL['OptionType']=='C').dropna()
-plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
-check = priceData120321BTC_CALL.where(priceData120321BTC_CALL['TimeToMaturity']==47).dropna().where(priceData120321BTC_CALL['OptionType']=='C').dropna()
-plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
-plt.show()
+# check = priceData120321BTC_CALL.where(priceData120321BTC_CALL['TimeToMaturity']==292).dropna().where(priceData120321BTC_CALL['OptionType']=='C').dropna()
+# plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
+# check = priceData120321BTC_CALL.where(priceData120321BTC_CALL['TimeToMaturity']==103).dropna().where(priceData120321BTC_CALL['OptionType']=='C').dropna()
+# plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
+# check = priceData120321BTC_CALL.where(priceData120321BTC_CALL['TimeToMaturity']==47).dropna().where(priceData120321BTC_CALL['OptionType']=='C').dropna()
+# plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
+# plt.show()
 
-check = priceData010621BTC.where(priceData010621BTC['Strike']==70000).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
-plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
-check = priceData010621BTC.where(priceData010621BTC['Strike']==35000).dropna().where(priceData010621BTC['OptionType']=='C').dropna().drop(index=100997)
-plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
-check = priceData010621BTC.where(priceData010621BTC['Strike']==20000).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
-plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
-plt.show()
+# check = priceData010621BTC.where(priceData010621BTC['Strike']==70000).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
+# plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
+# check = priceData010621BTC.where(priceData010621BTC['Strike']==35000).dropna().where(priceData010621BTC['OptionType']=='C').dropna().drop(index=100997)
+# plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
+# check = priceData010621BTC.where(priceData010621BTC['Strike']==20000).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
+# plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
+# plt.show()
 
 
 #3
 priceData161120BTC_CALL= priceData161120BTC.where(priceData161120BTC['OptionType']=='C').dropna()
 test= priceData161120BTC_CALL.where((priceData161120BTC_CALL[strikeBTC.name]/priceData161120BTC_CALL['base_price']) <=2.5).dropna()
-surf = mesh_plotBTC_C(fig,axis3,"16 November 2020",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price'])
+surf = mesh_plotBTC_Call2(fig2,axis32,"16 November 2020",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price'])
 
-optionChain = getOptionChain(test)
-np.mean(test['base_price'])
-np.sort(np.array(optionChain[4]['Strike']))
-np.sort(np.array(optionChain[18]['Strike']))
-np.sort(np.array(optionChain[39]['Strike']))
-np.sort(np.array(optionChain[130]['Strike']))
-np.sort(np.array(optionChain[221]['Strike']))
+# optionChain = getOptionChain(test)
+# np.mean(test['base_price'])
+# np.sort(np.array(optionChain[4]['Strike']))
+# np.sort(np.array(optionChain[18]['Strike']))
+# np.sort(np.array(optionChain[39]['Strike']))
+# np.sort(np.array(optionChain[130]['Strike']))
+# np.sort(np.array(optionChain[221]['Strike']))
 
-fig.colorbar(surf, ax=[axis1, axis2, axis3], shrink = 0.4, aspect = 7)
-fig.suptitle("Implied volatility surfaces Bitcoin",x=0.5,y=0.85,fontsize= 24, fontweight='bold')
+
+fig2.colorbar(surf, ax=[axis12, axis22, axis32], shrink = 0.4, aspect = 7)
+fig2.suptitle("Implied volatility surfaces Bitcoin calls",x=0.5,y=0.85,fontsize= 24, fontweight='bold')
 plt.rc('axes', labelsize=14)  
 plt.show()
 
-#ETH
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# BTC PUT
+fig, [axis1, axis2, axis3] = plt.subplots(1,3,figsize=(22.5,12), subplot_kw=dict(projection="3d",xlabel=r'$K/S$',ylabel=r'$T$',zlabel=r'$\sigma_{imp}$'),constrained_layout = True)
+
+#1
+priceData010621BTC_PUT= priceData010621BTC.where(priceData010621BTC['OptionType']=='P').dropna()
+test= priceData010621BTC_PUT.where((priceData010621BTC_PUT[strikeBTC.name]/priceData010621BTC_PUT['base_price']) <=2).dropna()
+surf = mesh_plotBTC(fig,axis1,"7 June 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price'])
+
+#2
+priceData120321BTC_PUT= priceData120321BTC.where(priceData120321BTC['OptionType']=='P').dropna()
+test= priceData120321BTC_PUT.where((priceData120321BTC_PUT[strikeBTC.name]/priceData120321BTC_PUT['base_price']) <=2).dropna()
+surf = mesh_plotBTC_P(fig,axis2,"14 March 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price'])
+
+#3
+priceData161120BTC_PUT= priceData161120BTC.where(priceData161120BTC['OptionType']=='P').dropna()
+test= priceData161120BTC_PUT.where((priceData161120BTC_PUT[strikeBTC.name]/priceData161120BTC_PUT['base_price']) <=2).dropna()
+surf = mesh_plotBTC_P1(fig,axis3,"16 November 2020",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price'])
+
+fig.colorbar(surf, ax=[axis1, axis2, axis3], shrink = 0.4, aspect = 7)
+fig.suptitle("Implied volatility surfaces Bitcoin puts",x=0.5,y=0.85,fontsize= 24, fontweight='bold')
+plt.rc('axes', labelsize=14)  
+plt.show()
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# #ETH CALL
 fig, [axis1, axis2, axis3] = plt.subplots(1,3,figsize=(22.5,12), subplot_kw=dict(projection="3d",xlabel=r'$K/S$',ylabel=r'$T$',zlabel=r'$\sigma_{imp}$'),constrained_layout = True)
 
 #1
 priceData010621ETH_CALL= priceData010621ETH.where(priceData010621ETH['OptionType']=='C').dropna()
 test= priceData010621ETH_CALL.where((priceData010621ETH_CALL[strikeETH.name]/priceData010621ETH_CALL['base_price']) <=2.5).dropna()
-axis1 = mesh_plotETH(fig,axis1,"7 June 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price'])
+axis1 = mesh_plotETH_Call(fig,axis1,"7 June 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price'])
 
-optionChain = getOptionChain(test)
-np.mean(test['base_price'])
-np.sort(np.array(optionChain[4]['Strike']))
-np.sort(np.array(optionChain[18]['Strike']))
-np.sort(np.array(optionChain[53]['Strike']))
-np.sort(np.array(optionChain[109]['Strike']))
-np.sort(np.array(optionChain[207]['Strike']))
+# optionChain = getOptionChain(test)
+# np.mean(test['base_price'])
+# np.sort(np.array(optionChain[4]['Strike']))
+# np.sort(np.array(optionChain[18]['Strike']))
+# np.sort(np.array(optionChain[53]['Strike']))
+# np.sort(np.array(optionChain[109]['Strike']))
+# np.sort(np.array(optionChain[207]['Strike']))
 
 #2
 priceData120321ETH_CALL= priceData120321ETH.where(priceData120321ETH['OptionType']=='C').dropna()
 test= priceData120321ETH_CALL.where((priceData120321ETH_CALL[strikeETH.name]/priceData120321ETH_CALL['base_price']) <=2.5).dropna()
-axis2 = mesh_plotETH(fig,axis2,"14 March 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price'])
+axis2 = mesh_plotETH_Call(fig,axis2,"14 March 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price'])
 
-optionChain = getOptionChain(test)
-np.mean(test['base_price'])
-np.sort(np.array(optionChain[5]['Strike']))
-np.sort(np.array(optionChain[12]['Strike']))
-np.sort(np.array(optionChain[103]['Strike']))
-np.sort(np.array(optionChain[194]['Strike']))
-np.sort(np.array(optionChain[292]['Strike']))
+# optionChain = getOptionChain(test)
+# np.mean(test['base_price'])
+# np.sort(np.array(optionChain[5]['Strike']))
+# np.sort(np.array(optionChain[12]['Strike']))
+# np.sort(np.array(optionChain[103]['Strike']))
+# np.sort(np.array(optionChain[194]['Strike']))
+# np.sort(np.array(optionChain[292]['Strike']))
 
 #3
 priceData161120ETH_CALL= priceData161120ETH.where(priceData161120ETH['OptionType']=='C').dropna()
 test= priceData161120ETH_CALL.where((priceData161120ETH_CALL[strikeETH.name]/priceData161120ETH_CALL['base_price']) <=2.5).dropna()
-surf = mesh_plotETH_C(fig,axis3,"16 November 2020",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price'])
+surf = mesh_plotETH_Call2(fig,axis3,"16 November 2020",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price'])
 
-optionChain = getOptionChain(test)
-np.mean(test['base_price'])
-np.sort(np.array(optionChain[4]['Strike']))
-np.sort(np.array(optionChain[18]['Strike']))
-np.sort(np.array(optionChain[39]['Strike']))
-np.sort(np.array(optionChain[130]['Strike']))
-np.sort(np.array(optionChain[221]['Strike']))
+# optionChain = getOptionChain(test)
+# np.mean(test['base_price'])
+# np.sort(np.array(optionChain[4]['Strike']))
+# np.sort(np.array(optionChain[18]['Strike']))
+# np.sort(np.array(optionChain[39]['Strike']))
+# np.sort(np.array(optionChain[130]['Strike']))
+# np.sort(np.array(optionChain[221]['Strike']))
 
 
 fig.colorbar(surf, ax=[axis1, axis2, axis3], shrink = 0.4, aspect = 7)
-fig.suptitle("Implied volatility surfaces Ethereum",x=0.5,y=0.85,fontsize= 24, fontweight='bold')
+fig.suptitle("Implied volatility surfaces Ethereum calls",x=0.5,y=0.85,fontsize= 24, fontweight='bold')
 plt.rc('axes', labelsize=14)   
 plt.show()
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#ETH PUT
+fig, [axis1, axis2, axis3] = plt.subplots(1,3,figsize=(22.5,12), subplot_kw=dict(projection="3d",xlabel=r'$K/S$',ylabel=r'$T$',zlabel=r'$\sigma_{imp}$'),constrained_layout = True)
+
+#1
+priceData010621ETH_PUT= priceData010621ETH.where(priceData010621ETH['OptionType']=='P').dropna()
+test= priceData010621ETH_PUT.where((priceData010621ETH_PUT[strikeETH.name]/priceData010621ETH_PUT['base_price']) <=2).dropna()
+axis1 = mesh_plotETH(fig,axis1,"7 June 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price'])
+
+#2
+priceData120321ETH_PUT= priceData120321ETH.where(priceData120321ETH['OptionType']=='P').dropna()
+test= priceData120321ETH_PUT.where((priceData120321ETH_PUT[strikeETH.name]/priceData120321ETH_PUT['base_price']) <=2).dropna()
+axis2 = mesh_plotETH_P(fig,axis2,"14 March 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price'])
+
+
+#3
+priceData161120ETH_PUT= priceData161120ETH.where(priceData161120ETH['OptionType']=='P').dropna()
+test= priceData161120ETH_PUT.where((priceData161120ETH_PUT[strikeETH.name]/priceData161120ETH_PUT['base_price']) <=2).dropna()
+surf = mesh_plotETH_P1(fig,axis3,"16 November 2020",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price'])
+
+
+fig.colorbar(surf, ax=[axis1, axis2, axis3], shrink = 0.4, aspect = 7)
+fig.suptitle("Implied volatility surfaces Ethereum puts",x=0.5,y=0.85,fontsize= 24, fontweight='bold')
+plt.rc('axes', labelsize=14)   
+plt.show()
+
 
