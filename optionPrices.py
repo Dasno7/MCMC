@@ -17,7 +17,7 @@ from scipy.optimize import curve_fit
 import scipy.stats as stats
 
 """Pricing data for 14-03-2021""" 
-priceData120321 = pd.read_csv("C:/Users/Sameer/Documents/Econometrics/Thesis/Crypto Data/thesis_data/2021_03_12/price_data_2021_03_12.csv")
+priceData120321 = pd.read_csv("Crypto Data Repo/Option Market Data/2021_03_12/price_data_2021_03_12.csv")
 startDate = datetime.strptime('2021-03-14','%Y-%m-%d')
 ## ETH
 priceData120321ETH = priceData120321.loc[(priceData120321['instrument'].str.startswith('deribit::ETH')&priceData120321['creation_time'].str.startswith('2021-03'))]
@@ -81,7 +81,7 @@ priceData120321BTC.dropna(inplace=True)
 
 
 """Pricing data for 07-06-2021""" 
-priceData010621 = pd.read_csv("C:/Users/Sameer/Documents/Econometrics/Thesis/Crypto Data/thesis_data/2021_06_01/price_data_2021_06_01.csv")
+priceData010621 = pd.read_csv("Crypto Data Repo/Option Market Data/2021_06_01/price_data_2021_06_01.csv")
 startDate = datetime.strptime('2021-06-07','%Y-%m-%d')
 ## ETH
 priceData010621ETH = priceData010621.loc[(priceData010621['instrument'].str.startswith('deribit::ETH')&priceData010621['creation_time'].str.startswith('2021-06'))]
@@ -143,12 +143,12 @@ priceData010621BTC[optionType.name]=optionType.copy()
 priceData010621BTC.dropna(inplace=True)
 
 """Pricing data for 16-11-2020""" 
-priceData161120 = pd.read_csv("C:/Users/Sameer/Documents/Econometrics/Thesis/Crypto Data/thesis_data/2020_11_10/price_data_2020_11_10.csv")
+priceData161120 = pd.read_csv("Crypto Data Repo/Option Market Data/2020_11_10/price_data_2020_11_10.csv")
 for file in range(10,17):
     if file !=10:
-        add = pd.read_csv("C:/Users/Sameer/Documents/Econometrics/Thesis/Crypto Data/thesis_data/2020_11_10/price_data_2020_11_"+str(file)+".csv")
+        add = pd.read_csv("Crypto Data Repo/Option Market Data/2020_11_10/price_data_2020_11_"+str(file)+".csv")
         priceData161120 = priceData161120.append(add)
-    add12 = pd.read_csv("C:/Users/Sameer/Documents/Econometrics/Thesis/Crypto Data/thesis_data/2020_11_10/price_data_2020_11_"+str(file)+"_12.csv")
+    add12 = pd.read_csv("Crypto Data Repo/Option Market Data/2020_11_10/price_data_2020_11_"+str(file)+"_12.csv")
     priceData161120 = priceData161120.append(add12)
     
 startDate = datetime.strptime('2020-11-16','%Y-%m-%d')
@@ -258,6 +258,7 @@ def mesh_plotBTC(fig,ax,title,X,Y,Z):
    surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=250, cstride=160,
                         edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=0, vcenter=0.25, vmax=0.5))
    ax.set_title(title, fontdict= { 'fontsize': 18},style='italic')
+   ax.view_init(33, 230)
    return ax
 
    
@@ -392,9 +393,9 @@ fig2, [axis12, axis22, axis32] = plt.subplots(1,3,figsize=(22.5,12), subplot_kw=
 #1
 priceData010621BTC_CALL= priceData010621BTC.where(priceData010621BTC['OptionType']=='C').dropna()
 test= priceData010621BTC_CALL.where((priceData010621BTC_CALL[strikeBTC.name]/priceData010621BTC_CALL['base_price']) <=2.5).dropna()
-axis12 = mesh_plotBTC_Call(fig2,axis12,"7 June 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price'])
+axis12 = mesh_plotBTC_Call(fig2,axis12,"7 June 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price']/np.sqrt(365))
 
-# optionChain = getOptionChain(test)
+optionChain = getOptionChain(test)
 # np.mean(test['base_price'])
 # np.sort(np.array(optionChain[4]['Strike']))
 # np.sort(np.array(optionChain[53]['Strike']))
@@ -421,9 +422,9 @@ axis12 = mesh_plotBTC_Call(fig2,axis12,"7 June 2021",test[strikeBTC.name]/test['
 #2
 priceData120321BTC_CALL= priceData120321BTC.where(priceData120321BTC['OptionType']=='C').dropna()
 test= priceData120321BTC_CALL.where((priceData120321BTC_CALL[strikeBTC.name]/priceData120321BTC_CALL['base_price']) <=2.5).dropna()
-axis22 = mesh_plotBTC_Call(fig2,axis22,"14 March 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price'])
+axis22 = mesh_plotBTC_Call(fig2,axis22,"14 March 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price']/np.sqrt(365))
 
-# optionChain = getOptionChain(test)
+optionChain = getOptionChain(test)
 # np.mean(test['base_price'])
 # np.sort(np.array(optionChain[5]['Strike']))
 # np.sort(np.array(optionChain[47]['Strike']))
@@ -451,9 +452,9 @@ axis22 = mesh_plotBTC_Call(fig2,axis22,"14 March 2021",test[strikeBTC.name]/test
 #3
 priceData161120BTC_CALL= priceData161120BTC.where(priceData161120BTC['OptionType']=='C').dropna()
 test= priceData161120BTC_CALL.where((priceData161120BTC_CALL[strikeBTC.name]/priceData161120BTC_CALL['base_price']) <=2.5).dropna()
-surf = mesh_plotBTC_Call2(fig2,axis32,"16 November 2020",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price'])
+surf = mesh_plotBTC_Call2(fig2,axis32,"16 November 2020",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price']/np.sqrt(365))
 
-# optionChain = getOptionChain(test)
+optionChain = getOptionChain(test)
 # np.mean(test['base_price'])
 # np.sort(np.array(optionChain[4]['Strike']))
 # np.sort(np.array(optionChain[18]['Strike']))
@@ -473,18 +474,22 @@ fig, [axis1, axis2, axis3] = plt.subplots(1,3,figsize=(22.5,12), subplot_kw=dict
 
 #1
 priceData010621BTC_PUT= priceData010621BTC.where(priceData010621BTC['OptionType']=='P').dropna()
-test= priceData010621BTC_PUT.where((priceData010621BTC_PUT[strikeBTC.name]/priceData010621BTC_PUT['base_price']) <=2).dropna()
-surf = mesh_plotBTC(fig,axis1,"7 June 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price'])
+test= priceData010621BTC_PUT.where((priceData010621BTC_PUT[strikeBTC.name]/priceData010621BTC_PUT['base_price']) <=2.5).dropna()
+surf = mesh_plotBTC(fig,axis1,"7 June 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price']/np.sqrt(365))
 
+optionChain = getOptionChain(test)
 #2
 priceData120321BTC_PUT= priceData120321BTC.where(priceData120321BTC['OptionType']=='P').dropna()
-test= priceData120321BTC_PUT.where((priceData120321BTC_PUT[strikeBTC.name]/priceData120321BTC_PUT['base_price']) <=2).dropna()
-surf = mesh_plotBTC_P(fig,axis2,"14 March 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price'])
+test= priceData120321BTC_PUT.where((priceData120321BTC_PUT[strikeBTC.name]/priceData120321BTC_PUT['base_price']) <=2.5).dropna()
+surf = mesh_plotBTC_P(fig,axis2,"14 March 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price']/np.sqrt(365))
 
+optionChain = getOptionChain(test)
 #3
 priceData161120BTC_PUT= priceData161120BTC.where(priceData161120BTC['OptionType']=='P').dropna()
-test= priceData161120BTC_PUT.where((priceData161120BTC_PUT[strikeBTC.name]/priceData161120BTC_PUT['base_price']) <=2).dropna()
-surf = mesh_plotBTC_P1(fig,axis3,"16 November 2020",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price'])
+test= priceData161120BTC_PUT.where((priceData161120BTC_PUT[strikeBTC.name]/priceData161120BTC_PUT['base_price']) <=2.5).dropna()
+surf = mesh_plotBTC_P1(fig,axis3,"16 November 2020",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price']/np.sqrt(365))
+
+optionChain = getOptionChain(test)
 
 fig.colorbar(surf, ax=[axis1, axis2, axis3], shrink = 0.4, aspect = 7)
 fig.suptitle("Implied volatility surfaces Bitcoin puts",x=0.5,y=0.85,fontsize= 24, fontweight='bold')
@@ -498,9 +503,9 @@ fig, [axis1, axis2, axis3] = plt.subplots(1,3,figsize=(22.5,12), subplot_kw=dict
 #1
 priceData010621ETH_CALL= priceData010621ETH.where(priceData010621ETH['OptionType']=='C').dropna()
 test= priceData010621ETH_CALL.where((priceData010621ETH_CALL[strikeETH.name]/priceData010621ETH_CALL['base_price']) <=2.5).dropna()
-axis1 = mesh_plotETH_Call(fig,axis1,"7 June 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price'])
+axis1 = mesh_plotETH_Call(fig,axis1,"7 June 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price']/np.sqrt(365))
 
-# optionChain = getOptionChain(test)
+optionChain = getOptionChain(test)
 # np.mean(test['base_price'])
 # np.sort(np.array(optionChain[4]['Strike']))
 # np.sort(np.array(optionChain[18]['Strike']))
@@ -511,9 +516,9 @@ axis1 = mesh_plotETH_Call(fig,axis1,"7 June 2021",test[strikeETH.name]/test['bas
 #2
 priceData120321ETH_CALL= priceData120321ETH.where(priceData120321ETH['OptionType']=='C').dropna()
 test= priceData120321ETH_CALL.where((priceData120321ETH_CALL[strikeETH.name]/priceData120321ETH_CALL['base_price']) <=2.5).dropna()
-axis2 = mesh_plotETH_Call(fig,axis2,"14 March 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price'])
+axis2 = mesh_plotETH_Call(fig,axis2,"14 March 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price']/np.sqrt(365))
 
-# optionChain = getOptionChain(test)
+optionChain = getOptionChain(test)
 # np.mean(test['base_price'])
 # np.sort(np.array(optionChain[5]['Strike']))
 # np.sort(np.array(optionChain[12]['Strike']))
@@ -524,9 +529,9 @@ axis2 = mesh_plotETH_Call(fig,axis2,"14 March 2021",test[strikeETH.name]/test['b
 #3
 priceData161120ETH_CALL= priceData161120ETH.where(priceData161120ETH['OptionType']=='C').dropna()
 test= priceData161120ETH_CALL.where((priceData161120ETH_CALL[strikeETH.name]/priceData161120ETH_CALL['base_price']) <=2.5).dropna()
-surf = mesh_plotETH_Call2(fig,axis3,"16 November 2020",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price'])
+surf = mesh_plotETH_Call2(fig,axis3,"16 November 2020",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price']/np.sqrt(365))
 
-# optionChain = getOptionChain(test)
+optionChain = getOptionChain(test)
 # np.mean(test['base_price'])
 # np.sort(np.array(optionChain[4]['Strike']))
 # np.sort(np.array(optionChain[18]['Strike']))
@@ -546,20 +551,24 @@ fig, [axis1, axis2, axis3] = plt.subplots(1,3,figsize=(22.5,12), subplot_kw=dict
 
 #1
 priceData010621ETH_PUT= priceData010621ETH.where(priceData010621ETH['OptionType']=='P').dropna()
-test= priceData010621ETH_PUT.where((priceData010621ETH_PUT[strikeETH.name]/priceData010621ETH_PUT['base_price']) <=2).dropna()
-axis1 = mesh_plotETH(fig,axis1,"7 June 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price'])
+test= priceData010621ETH_PUT.where((priceData010621ETH_PUT[strikeETH.name]/priceData010621ETH_PUT['base_price']) <=2.5).dropna()
+axis1 = mesh_plotETH(fig,axis1,"7 June 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price']/np.sqrt(365))
+
+optionChain = getOptionChain(test)
 
 #2
 priceData120321ETH_PUT= priceData120321ETH.where(priceData120321ETH['OptionType']=='P').dropna()
-test= priceData120321ETH_PUT.where((priceData120321ETH_PUT[strikeETH.name]/priceData120321ETH_PUT['base_price']) <=2).dropna()
-axis2 = mesh_plotETH_P(fig,axis2,"14 March 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price'])
+test= priceData120321ETH_PUT.where((priceData120321ETH_PUT[strikeETH.name]/priceData120321ETH_PUT['base_price']) <=2.5).dropna()
+axis2 = mesh_plotETH_P(fig,axis2,"14 March 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price']/np.sqrt(365))
 
+optionChain = getOptionChain(test)
 
 #3
 priceData161120ETH_PUT= priceData161120ETH.where(priceData161120ETH['OptionType']=='P').dropna()
-test= priceData161120ETH_PUT.where((priceData161120ETH_PUT[strikeETH.name]/priceData161120ETH_PUT['base_price']) <=2).dropna()
-surf = mesh_plotETH_P1(fig,axis3,"16 November 2020",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price'])
+test= priceData161120ETH_PUT.where((priceData161120ETH_PUT[strikeETH.name]/priceData161120ETH_PUT['base_price']) <=2.5).dropna()
+surf = mesh_plotETH_P1(fig,axis3,"16 November 2020",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price']/np.sqrt(365))
 
+optionChain = getOptionChain(test)
 
 fig.colorbar(surf, ax=[axis1, axis2, axis3], shrink = 0.4, aspect = 7)
 fig.suptitle("Implied volatility surfaces Ethereum puts",x=0.5,y=0.85,fontsize= 24, fontweight='bold')

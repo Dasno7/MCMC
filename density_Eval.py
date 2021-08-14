@@ -47,8 +47,7 @@ def censoredLikScore(y,mu,sigma2,r):
 # GBM
 m ={'Bitcoin': 0.02817135116188635, 'LINK': 0.06792776181895642, 'ETH': 0.028163787262985164, 'ADA': 0.026269044494565446}#/np.sqrt(365)
 sigma2_y = {'Bitcoin': 0.6945836313141901, 'LINK': 1.8381271048871903, 'ETH': 1.123005248647937, 'ADA': 1.3440624591240018}#/np.sqrt(365)
-r = {'Bitcoin': -1, 'LINK': -2, 'ETH': -1.5, 'ADA': -1.7}#/np.sqrt(365)
-#r = {'Bitcoin': 1, 'LINK': 2, 'ETH': 1.5, 'ADA': 1.7}#/np.sqrt(365)
+r = {'Bitcoin': -1, 'LINK': -2, 'ETH': -1.5, 'ADA': -1.7}
 
 scoreGBM={}
 scoreMeanGBM={}
@@ -69,7 +68,7 @@ for crypto in cryptos:
 # GBMJ
 m ={'Bitcoin': 0.33723856804279545, 'LINK': 0.07350790244795152, 'ETH': -0.13193574849128004, 'ADA': -0.342408545740982}
 sigma2_y = {'Bitcoin': 0.6969039835192633, 'LINK': 1.7246845080166926, 'ETH': 1.1282169361226804, 'ADA': 1.3454950393943221}
-r = {'Bitcoin': -1, 'LINK': -2, 'ETH': -2, 'ADA': -3}#/np.sqrt(365)
+r = {'Bitcoin': -1, 'LINK': -2, 'ETH': -2, 'ADA': -3}
 
 scoreGBMJ={}
 scoreMeanGBMJ={}
@@ -110,7 +109,7 @@ def predictAbilityTest(scoreVec1,scoreVec2,n,m):
     return str(t_mn)+signLevel
 
 cryptos = ['Bitcoin','LINK','ETH','ADA']
-crypto='Bitcoin'
+crypto='ADA' # Change crypto here to see results for different crypto
 n =  {'Bitcoin': 1369, 'LINK': 713, 'ETH': 1381, 'ADA': 1130}
 m=Y[crypto].size
 
@@ -142,4 +141,4 @@ svcjTest.append(predictAbilityTest(scoreSVCJ[crypto],scoreSV[crypto],n[crypto],m
 svcjTest.append(predictAbilityTest(scoreSVCJ[crypto],scoreGBMJ[crypto],n[crypto],m))
 svcjTest.append(0)
 
-test = pd.DataFrame([gbmTest,svTest,gbmjTest,svcjTest]).T
+resultTable = pd.DataFrame([gbmTest,svTest,gbmjTest,svcjTest]).T

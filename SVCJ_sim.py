@@ -36,18 +36,31 @@ for crypto in cryptos:
     #Y[crypto].index = [datetime.datetime.strptime(Y[crypto].index[j],format_str) for j in range(T[crypto])]
 
 #Final param results
+# mu ={'Bitcoin': 0.021644682489966826, 'LINK':0.03645939802343439, 'ETH':  0.015283256840018638, 'ADA':-0.007316876526135481 }#/np.sqrt(365)
+# s2V ={'Bitcoin': 0.06756870157684675, 'LINK':0.40446812600230947, 'ETH':  0.17931239389025172, 'ADA':0.26116042635375053 }#/np.sqrt(365)
+# alpha ={'Bitcoin': 0.043193377631366804, 'LINK': 0.3855999310971581, 'ETH':   0.16119100120638954, 'ADA':0.2662085060789083 }
+# beta ={'Bitcoin': 0.9263876734631863 , 'LINK':0.7873614865856806 , 'ETH':  0.8491499506560084, 'ADA':0.7995479771756661 }
+# rho ={'Bitcoin': -0.09119104913669938, 'LINK':-0.10825275611533464, 'ETH':  -0.12041305370319762, 'ADA':-0.09317621524732624  }
+# kappa ={'Bitcoin':(1-beta['Bitcoin']) , 'LINK':(1-beta['LINK']), 'ETH':(1- beta['ETH']), 'ADA': (1-beta['ADA'])}
+# theta ={'Bitcoin':  alpha['Bitcoin']/kappa['Bitcoin'], 'LINK':alpha['LINK']/kappa['LINK'], 'ETH': alpha['ETH']/kappa['ETH'], 'ADA': alpha['ADA']/kappa['ADA']}
+# mJ = {'Bitcoin': 0.9406651072820391, 'LINK':3.098086827567313 , 'ETH':  2.520408386900445, 'ADA':2.068795155113863 }
+# s2J = {'Bitcoin': 8.42181066157726 , 'LINK':27.90186571275088, 'ETH':  13.099952280133733, 'ADA':17.140749486332407 }
+# lambd = {'Bitcoin': 0.0053092423361834245, 'LINK':0.0025708713027121845, 'ETH':  0.002263724926372133, 'ADA':0.002458274763338694 }
+# mV = {'Bitcoin': 2.30966833400468, 'LINK': 2.002095925724665, 'ETH':  2.192366611567432 , 'ADA':1.986970474497482 }
+# rhoJ = {'Bitcoin': -0.05277382444932916, 'LINK':-0.0850455673163998 , 'ETH':  -0.16674148085665919, 'ADA':-0.16623534607963417 }
 
-mu ={'Bitcoin': 0.021644682489966826, 'LINK':0.03645939802343439, 'ETH':  0.015283256840018638, 'ADA':-0.007316876526135481 }#/np.sqrt(365)
-s2V ={'Bitcoin': 0.06756870157684675, 'LINK':0.40446812600230947, 'ETH':  0.17931239389025172, 'ADA':0.26116042635375053 }#/np.sqrt(365)
+
+mu ={'Bitcoin': 0.021644682489966826, 'LINK':0.03645939802343439, 'ETH':  0.015283256840018638/365, 'ADA':-0.007316876526135481 }#/np.sqrt(365)
+s2V ={'Bitcoin': 0.06756870157684675, 'LINK':0.40446812600230947, 'ETH':  0.17931239389025172/365, 'ADA':0.26116042635375053 }#/np.sqrt(365)
 alpha ={'Bitcoin': 0.043193377631366804, 'LINK': 0.3855999310971581, 'ETH':   0.16119100120638954, 'ADA':0.2662085060789083 }
 beta ={'Bitcoin': 0.9263876734631863 , 'LINK':0.7873614865856806 , 'ETH':  0.8491499506560084, 'ADA':0.7995479771756661 }
 rho ={'Bitcoin': -0.09119104913669938, 'LINK':-0.10825275611533464, 'ETH':  -0.12041305370319762, 'ADA':-0.09317621524732624  }
 kappa ={'Bitcoin':(1-beta['Bitcoin']) , 'LINK':(1-beta['LINK']), 'ETH':(1- beta['ETH']), 'ADA': (1-beta['ADA'])}
 theta ={'Bitcoin':  alpha['Bitcoin']/kappa['Bitcoin'], 'LINK':alpha['LINK']/kappa['LINK'], 'ETH': alpha['ETH']/kappa['ETH'], 'ADA': alpha['ADA']/kappa['ADA']}
-mJ = {'Bitcoin': 0.9406651072820391, 'LINK':3.098086827567313 , 'ETH':  2.520408386900445, 'ADA':2.068795155113863 }
-s2J = {'Bitcoin': 8.42181066157726 , 'LINK':27.90186571275088, 'ETH':  13.099952280133733, 'ADA':17.140749486332407 }
-lambd = {'Bitcoin': 0.0053092423361834245, 'LINK':0.0025708713027121845, 'ETH':  0.002263724926372133, 'ADA':0.002458274763338694 }
-mV = {'Bitcoin': 2.30966833400468, 'LINK': 2.002095925724665, 'ETH':  2.192366611567432 , 'ADA':1.986970474497482 }
+mJ = {'Bitcoin': 0.9406651072820391/365, 'LINK':3.098086827567313 , 'ETH':  2.520408386900445/365, 'ADA':2.068795155113863 }
+s2J = {'Bitcoin': 8.42181066157726 /np.sqrt(365), 'LINK':27.90186571275088, 'ETH':  13.099952280133733/(365), 'ADA':17.140749486332407 }
+lambd = {'Bitcoin': 0.0053092423361834245, 'LINK':0.0025708713027121845, 'ETH':  0.002263724926372133/365, 'ADA':0.002458274763338694 }
+mV = {'Bitcoin': 2.30966833400468*np.sqrt(365), 'LINK': 2.002095925724665, 'ETH':  2.192366611567432/365 , 'ADA':1.986970474497482 }
 rhoJ = {'Bitcoin': -0.05277382444932916, 'LINK':-0.0850455673163998 , 'ETH':  -0.16674148085665919, 'ADA':-0.16623534607963417 }
 
 # mu ={'Bitcoin':0.017459440979314584, 'LINK':0.03645939802343439, 'ETH':  0.015283256840018638, 'ADA':-0.007316876526135481 }#/np.sqrt(365)
@@ -195,6 +208,15 @@ def black_scholes_call(S, K, T, r, sigma):
 
     call = S * special.ndtr(d1) -  special.ndtr(d2)* K * np.exp(-r * T)
     return call
+
+def putOptionPriceAnalytical(S0, K, T, r, sigma):
+    d1 = (np.log(S0 / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
+    d2 = (np.log(S0 / K) + (r - 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
+    N_d1 = stats.norm.cdf(-d1)
+    N_d2 = stats.norm.cdf(-d2)
+
+    europePutAnalytical = K * np.exp(-r * T) * N_d2 - S0 * N_d1
+    return europePutAnalytical
     
 def implied_volatility_call(C, S, K, T, r, tol=0.0001,
                             max_iterations=1e6):
@@ -204,7 +226,7 @@ def implied_volatility_call(C, S, K, T, r, tol=0.0001,
 
         ### calculate difference between blackscholes price and market price with
         ### iteratively updated volality estimate
-        diff = C - black_scholes_call(S, K, T, r, sigma)
+        diff = C - putOptionPriceAnalytical(S, K, T, r, sigma)
 
         ###break if difference is less than specified tolerance level
         if abs(diff) < tol:
@@ -214,10 +236,11 @@ def implied_volatility_call(C, S, K, T, r, tol=0.0001,
                 return np.nan
             else: return sigma
 
-        ### use newton rapshon to update the estimate
+        ### use newton raphson to update the estimate
         sigma = sigma + diff / vega(S, K, T, r, sigma)
 
     return np.nan
+
 
 def simulSVCJ(crypto,stockPrice,horiz):
     V    = np.zeros(horiz+1)  # Volatility of log return
@@ -258,7 +281,7 @@ def simulSVCJ(crypto,stockPrice,horiz):
             
             #transformed volatility scheme
             v[i] = v[i-1]+0.5*(kappa[crypto]*(theta[crypto]/v[i-1]-v[i-1])+s2V[crypto]/(4*v[i-1])+s2V[crypto]**0.5*Zv)+(np.sqrt(v[i-1]**2+XV)-v[i-1])*J
-            Y[i] = mu[crypto]*dt +np.sqrt(TT/horiz)*(v[i-1]*Zy)+Jy[i]*(TT/horiz)
+            Y[i] = (mu[crypto]-0.5*v[i-1])*dt +np.sqrt(TT/horiz)*(v[i-1]*Zy)+Jy[i]*(TT/horiz)
             
             S[i] = np.exp(Y[i])*S[i-1]
             
@@ -281,7 +304,7 @@ def simulSVCJ(crypto,stockPrice,horiz):
 #---------------------------------------------------------------------------------------------------------------------------
 # Crude Monte Carlo option pricing
 
-# BTC scenario 1: 7 June 2021 S_0=35198
+#BTC scenario 1: 7 June 2021 S_0=35198
 
 crypto = 'Bitcoin'
 S=35198
@@ -298,14 +321,14 @@ sim = simulSVCJ(crypto,S,np.max(T_BTC1))
 i=0; optionDict_BTC1= {}
 for K in K_BTC1:
     for t in T_BTC1:
-        payOffCall = (sim[:,t]-K).clip(min=0)
-        callPrice =np.mean(payOffCall)
+        payOffCall = (K-sim[:,t]).clip(min=0)
+        callPrice =np.mean(payOffCall)#*np.exp(-mu[crypto]*(t/365))
         optionDict_BTC1[i]=[callPrice,t,K]
         i+=1
 BTC1 = pd.DataFrame(optionDict_BTC1).T
 BTC1.columns = ['Call price','T','K']
     
-imp = [implied_volatility_call(BTC1.loc[x]['Call price'],S,BTC1.loc[x]['K'],BTC1.loc[x]['T']/365,0,max_iterations=int(1e4)) for x in BTC1.index]   
+imp = [implied_volatility_call(BTC1.loc[x]['Call price'],S,BTC1.loc[x]['K'],BTC1.loc[x]['T']/365,mu[crypto],max_iterations=int(1e2)) for x in BTC1.index]   
 BTC1["IV"]=imp
 
 
@@ -327,14 +350,14 @@ BTC1["IV"]=imp
 # i=0; optionDict_BTC2= {}
 # for K in K_BTC2:
 #     for t in T_BTC2:
-#         payOffCall = (sim[:,t]-K).clip(min=0)
+#         payOffCall = (K-sim[:,t]).clip(min=0)
 #         callPrice =np.mean(payOffCall)
 #         optionDict_BTC2[i]=[callPrice,t,K]
 #         i+=1
 # BTC2 = pd.DataFrame(optionDict_BTC2).T
 # BTC2.columns = ['Call price','T','K']
     
-# imp = [implied_volatility_call(BTC2.loc[x]['Call price'],S,BTC2.loc[x]['K'],BTC2.loc[x]['T']/365,0,max_iterations=int(1e4)) for x in BTC2.index]   
+# imp = [implied_volatility_call(BTC2.loc[x]['Call price'],S,BTC2.loc[x]['K'],BTC2.loc[x]['T']/365,0,max_iterations=int(1e2)) for x in BTC2.index]   
 # BTC2["IV"]=imp
 
 # #BTC scenario 3: 16 November 2020 S_0=16052
@@ -356,15 +379,105 @@ BTC1["IV"]=imp
 # i=0; optionDict_BTC3= {}
 # for K in K_BTC3:
 #     for t in T_BTC3:
-#         payOffCall = (sim[:,t]-K).clip(min=0)
+#         payOffCall = (K-sim[:,t]).clip(min=0)
 #         callPrice =np.mean(payOffCall)
 #         optionDict_BTC3[i]=[callPrice,t,K]
 #         i+=1
 # BTC3 = pd.DataFrame(optionDict_BTC3).T
 # BTC3.columns = ['Call price','T','K']
     
-# imp = [implied_volatility_call(BTC3.loc[x]['Call price'],S,BTC3.loc[x]['K'],BTC3.loc[x]['T']/365,0,max_iterations=int(1e4)) for x in BTC3.index]   
+# imp = [implied_volatility_call(BTC3.loc[x]['Call price'],S,BTC3.loc[x]['K'],BTC3.loc[x]['T']/365,0,max_iterations=int(1e2)) for x in BTC3.index]   
 # BTC3["IV"]=imp
+
+
+# #ETH scenario 1: 7 June 2021 S_0=1795
+# crypto = 'ETH'
+# S=1795
+
+# K_ETH1=np.array([2150, 2400, 2550, 2600, 2300, 2900, 2500, 2750, 2450, 2350, 2700,
+#         2000, 2200, 2650, 2250, 2100, 2800, 2850, 3000, 5200, 3500, 5800,
+#         5400, 4500, 4800, 4000, 3750, 4100, 6000, 1200, 3200, 3850, 5000,
+#         1900, 3100, 4050, 1400, 3550, 3300, 6200, 4400, 3700, 1600, 1800,
+#         4300, 4200, 3650, 1700, 3900, 4600, 5600, 3950, 4150, 3800, 3600,
+#         3400, 3450, 2950, 640, 1280, 800, 2880, 600, 560, 380, 960, 2240,
+#         3840, 1920, 360, 280, 1000, 3680, 3520, 2720, 1120, 1440, 340, 480,
+#         2560, 1500, 320, 1040, 2080, 200, 400, 240, 520, 440, 4480, 5500,
+#         720, 4320, 4160])
+
+# T_ETH1=np.array([2, 11, 109, 18, 53, 207, 4, 81, 1, 291])
+
+# sim = simulSVCJ(crypto,S,np.max(T_ETH1))
+
+# i=0; optionDict_ETH1= {}
+# for K in K_ETH1:
+#     for t in T_ETH1:
+#         payOffCall = (sim[:,t]-K).clip(min=0)
+#         callPrice =np.mean(payOffCall)
+#         optionDict_ETH1[i]=[callPrice,t,K]
+#         i+=1
+# ETH1 = pd.DataFrame(optionDict_ETH1).T
+# ETH1.columns = ['Call price','T','K']
+    
+# imp = [implied_volatility_call(ETH1.loc[x]['Call price'],S,ETH1.loc[x]['K'],ETH1.loc[x]['T']/365,0,max_iterations=int(1e2)) for x in ETH1.index]   
+# ETH1["IV"]=imp
+
+# #ETH scenario 2: 14 March 2021 S_0=2647
+# crypto = 'ETH'
+# S=2647
+
+# K_ETH2=np.array([1120, 1740, 1240, 1200, 2040, 1640, 1400, 1520, 2240, 2640, 2120,
+#         1840, 1600, 1440, 1860, 1960, 2200, 1800, 2320, 1680, 1360, 2080,
+#         2400, 2560, 2000, 1320, 1900, 1760, 1780, 1280, 1920, 1880, 2280,
+#         2900, 3000, 4000, 4080, 4380, 4520, 3240, 3680, 4800, 5240, 3960,
+#         2480, 1720, 2800, 2720, 2880, 2160, 1560, 1820, 1480, 1660, 1700,
+#         1620, 1940, 1980, 2060, 2020, 440, 180, 640, 720, 300, 800, 600,
+#         3200, 3000, 560, 380, 960, 3520, 1950, 3840, 420, 360, 280, 4160,
+#         1850, 340, 320, 2100, 160, 520, 480, 2600, 140, 2500, 460, 220,
+#         1040, 200, 1000, 400, 260, 240, 1750, 4000, 1500, 880])
+
+# T_ETH2=np.array([2, 3, 4, 6, 5, 19, 75, 47, 12, 194, 103, 292, 26])
+
+# sim = simulSVCJ(crypto,S,np.max(T_ETH2))
+
+# i=0; optionDict_ETH2= {}
+# for K in K_ETH2:
+#     for t in T_ETH2:
+#         payOffCall = (K-sim[:,t]).clip(min=0)
+#         callPrice =np.mean(payOffCall)
+#         optionDict_ETH2[i]=[callPrice,t,K]
+#         i+=1
+# ETH2 = pd.DataFrame(optionDict_ETH2).T
+# ETH2.columns = ['Call price','T','K']
+    
+# imp = [implied_volatility_call(ETH2.loc[x]['Call price'],S,ETH2.loc[x]['K'],ETH2.loc[x]['T']/365,0,max_iterations=int(1e2)) for x in ETH2.index]   
+# ETH2["IV"]=imp
+
+# #ETH scenario 3: 16 November 2020 S_0=458
+# crypto = 'ETH'
+# S=458
+
+# K_ETH3=np.array([470, 500, 430, 460, 390, 480, 420, 410, 400, 490, 450, 440, 180,
+#         320, 300, 340, 240, 330, 80, 380, 280, 220, 120, 160, 360, 140,
+#         290, 100, 310, 40, 200, 260, 350, 370, 60, 530, 550, 510, 540, 560,
+#         520, 580, 800, 720, 640, 630, 960, 600, 1120, 590, 620, 570, 880,
+#         610])
+
+# T_ETH3=np.array([130, 39, 11, 4, 221, 74, 18, 1, 0, 2])
+
+# sim = simulSVCJ(crypto,S,np.max(T_ETH3))
+
+# i=0; optionDict_ETH3= {}
+# for K in K_ETH3:
+#     for t in T_ETH3:
+#         payOffCall = (K-sim[:,t]).clip(min=0)
+#         callPrice =np.mean(payOffCall)
+#         optionDict_ETH3[i]=[callPrice,t,K]
+#         i+=1
+# ETH3 = pd.DataFrame(optionDict_ETH3).T
+# ETH3.columns = ['Call price','T','K']
+    
+# imp = [implied_volatility_call(ETH3.loc[x]['Call price'],S,ETH3.loc[x]['K'],ETH3.loc[x]['T']/365,0,max_iterations=int(1e2)) for x in ETH3.index]   
+# ETH3["IV"]=imp
 
 #--------------------------------------------------------------------------------------------------------------------------------------
 #Plot Functions
@@ -376,21 +489,22 @@ def make_surf(X,Y,Z):
 
 def mesh_plotBTC(fig,ax,title,X,Y,Z):
     XX,YY,ZZ = make_surf(X,Y,Z)
-    np.nan_to_num(ZZ[:,135:],copy=False,nan=0)
+    #np.nan_to_num(ZZ[:,135:],copy=False,nan=0)
     ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=1000,limit_direction='both'))
     XX=XX[:,50:200];YY=YY[:,50:200];ZZ=ZZ[:,50:200]
-    XX=XX[20:,:];YY=YY[20:,:];ZZ=ZZ[20:,:]   
+    XX=XX[70:,:];YY=YY[70:,:];ZZ=ZZ[70:,:]   
     my_cmap = plt.get_cmap('plasma') 
     surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=25, cstride=16,
                         edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=0, vcenter=0.25, vmax=0.5))
     ax.set_title(title, fontdict= { 'fontsize': 18},style='italic')
+    ax.view_init(33, 60) 
     return ax
 
 def mesh_plotBTC_3(fig,ax,title,X,Y,Z):
     #fig = plt.figure()
     #ax = Axes3D(fig, azim = -29, elev = 50)
     XX,YY,ZZ = make_surf(X,Y,Z)
-    np.nan_to_num(ZZ[:,93:],copy=False,nan=0)
+    #np.nan_to_num(ZZ[:,93:],copy=False,nan=0)
     ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=1000,limit_direction='both'))
     XX=XX[:,40:];YY=YY[:,40:];ZZ=ZZ[:,40:]
     XX=XX[40:,:];YY=YY[40:,:];ZZ=ZZ[40:,:]  
@@ -398,6 +512,7 @@ def mesh_plotBTC_3(fig,ax,title,X,Y,Z):
     surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=25, cstride=16,
                         edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=0, vcenter=0.25, vmax=0.5))
     ax.set_title(title, fontdict= { 'fontsize': 18},style='italic')
+    ax.view_init(33, 230) 
     return surf
 
 #--------------------------------------------------------------------------------------------------------------------------------------
@@ -407,12 +522,23 @@ fig, [axis1, axis2, axis3] = plt.subplots(1,3,figsize=(22.5,12), subplot_kw=dict
 model='IV'
 
 BTC1_plot= BTC1.where((BTC1['K']/35198) <=2.5).dropna()
-axis1 = mesh_plotBTC(fig,axis1,"7 June 2021",BTC1_plot['K']/35198,BTC1_plot['T']/365,BTC1_plot[model]/np.sqrt(365))
+axis1 = mesh_plotBTC(fig,axis1,"7 June 2021",BTC1_plot['K']/35198,BTC1_plot['T']/365,BTC1_plot[model])
 
 # BTC2_plot= BTC2.where((BTC2['K']/57663) <=2.5).dropna()
-# axis2 = mesh_plotBTC(fig,axis2,"14 March 2021",BTC2_plot['K']/57663,BTC2_plot['T']/365,BTC2_plot[model]/np.sqrt(25))
+# axis2 = mesh_plotBTC(fig,axis2,"14 March 2021",BTC2_plot['K']/57663,BTC2_plot['T']/365,(BTC2_plot[model]-np.min(BTC2_plot[model])))
 
 # BTC3_plot= BTC3.where((BTC3['K']/16053) <=2.5).dropna()
-# axis3 = mesh_plotBTC_3(fig,axis3,"16 November 2020",BTC3_plot['K']/16053,BTC3_plot['T']/365,BTC3_plot[model]/np.sqrt(25))
+# axis3 = mesh_plotBTC_3(fig,axis3,"16 November 2020",BTC3_plot['K']/16053,BTC3_plot['T']/365,(BTC3_plot[model]-np.min(BTC3_plot[model])))
 
+
+# fig, [axis1, axis2, axis3] = plt.subplots(1,3,figsize=(22.5,12), subplot_kw=dict(projection="3d",xlabel=r'$K/S$',ylabel=r'$T$',zlabel=r'$\sigma_{imp}$'),constrained_layout = True)
+
+# ETH1_plot= ETH1.where((ETH1['K']/1795) <=2.5).dropna()
+# axis1 = mesh_plotBTC(fig,axis1,"7 June 2021",ETH1_plot['K']/1795,ETH1_plot['T']/365,ETH1_plot[model])
+
+# ETH2_plot= ETH2.where((ETH2['K']/2647) <=2.5).dropna()
+# axis2 = mesh_plotBTC(fig,axis2,"14 March 2021",ETH2_plot['K']/2647,ETH2_plot['T']/365,(ETH2_plot[model]-np.min(ETH2_plot[model]))/2)
+
+# ETH3_plot= ETH3.where((ETH3['K']/458) <=2.5).dropna()
+# axis3 = mesh_plotBTC(fig,axis3,"16 November 2020",ETH3_plot['K']/458,ETH3_plot['T']/365,(ETH3_plot[model]-np.min(ETH3_plot[model])-0.1)/2)
 

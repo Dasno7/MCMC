@@ -84,7 +84,7 @@ sigma2_v=D/(d-1)
 alpha=b;beta=c;m=a;rho=0;
 #r,R = get_hyperGamma(Y[np.where(J==1)[0]],5) #hyper of mu_v
 r=10;R=20
-mu_v = (R/(r-1))
+mu_v = (R/(r-1))*0
 xi_v = np.random.exponential(mu_v,T)
 rho_j=0
 mu_s = e
@@ -108,7 +108,7 @@ stdRho = 0.01; dfRho = 6.5;acceptPropRho = 0;rhotot=0;rhotot2=0 #drawing rho
 dfV = 4.5; stdV=0.9; Vtot=0;Vtot2=0;acceptPropV=np.zeros(T)
 
 
-N=100000;burn=30000 #Number of draws and burn period
+N=10000;burn=3000 #Number of draws and burn period
 m_save = np.zeros(N)
 sig2V_save = np.zeros(N)
 rho_save = np.zeros(N)
@@ -223,22 +223,22 @@ for i in tqdm(range(N)):
     sigma2S_save[i] = sigma2_s
     
     #Draw mu_v
-    r_star = r+2*T
-    R_star = R+2*np.sum(xi_v)
-    mu_v = stats.invwishart.rvs(r_star,R_star)
-    if i > burn:
-        mVtot += mu_v
-        mVtot2 += mu_v**2
-    muV_save[i] = mu_v
+    # r_star = r+2*T
+    # R_star = R+2*np.sum(xi_v)
+    # mu_v = stats.invwishart.rvs(r_star,R_star)
+    # if i > burn:
+    #     mVtot += mu_v
+    #     mVtot2 += mu_v**2
+    # muV_save[i] = mu_v
         
     #Draw rho_J
-    G_star=1/(np.sum(xi_v**2)/sigma2_s+1/G)
-    g_star=G_star*(np.sum((xi_s-mu_s)*xi_v)/sigma2_s+g/G)
-    rho_j = np.random.normal(g_star,G_star**0.5)
-    if i>burn:
-        rho_jtot += rho_j
-        rho_jtot2 += rho_j**2
-    rho_j_save[i] = rho_j
+    # G_star=1/(np.sum(xi_v**2)/sigma2_s+1/G)
+    # g_star=G_star*(np.sum((xi_s-mu_s)*xi_v)/sigma2_s+g/G)
+    # rho_j = np.random.normal(g_star,G_star**0.5)
+    # if i>burn:
+    #     rho_jtot += rho_j
+    #     rho_jtot2 += rho_j**2
+    # rho_j_save[i] = rho_j
         
     #Jumps
     eY0 = Y - m
@@ -255,17 +255,17 @@ for i in tqdm(range(N)):
     #xi_v     (improve by vectorizing?)
     Jindex = np.where(J==1)[0] 
     Jnot = np.where(J==0)[0] 
-    xi_v[Jnot] = np.random.exponential(mu_v,xi_v[Jnot].size)
-    if Jindex.size != 0:
-        for j in Jindex:
-         eY = Y[j]-m-xi_s[j]
-         eV  = V[j]-alpha-V_min1[j]*beta
-         sigma2_v_star = 1/(1/(sigma2_v*(1-rho**2)*V_min1[j])+rho_j**2/sigma2_s**2)
-         mu_v_star = sigma2_v_star*((eV-rho*sigma2_v**0.5*eY)/(sigma2_v*(1-rho**2)*V_min1[j])+rho_j*(xi_s[j]-mu_s)/(sigma2_s)-1/mu_v)
-         upper_bound = mu_v_star+5*sigma2_v_star**0.5
-         if upper_bound>0: xi_v[j] = trunc_norm(mu_v_star,  sigma2_v_star, 0, upper_bound)
-    if i>burn:
-        xi_v_tot += xi_v 
+    # xi_v[Jnot] = np.random.exponential(mu_v,xi_v[Jnot].size)
+    # if Jindex.size != 0:
+    #     for j in Jindex:
+    #      eY = Y[j]-m-xi_s[j]
+    #      eV  = V[j]-alpha-V_min1[j]*beta
+    #      sigma2_v_star = 1/(1/(sigma2_v*(1-rho**2)*V_min1[j])+rho_j**2/sigma2_s**2)
+    #      mu_v_star = sigma2_v_star*((eV-rho*sigma2_v**0.5*eY)/(sigma2_v*(1-rho**2)*V_min1[j])+rho_j*(xi_s[j]-mu_s)/(sigma2_s)-1/mu_v)
+    #      upper_bound = mu_v_star+5*sigma2_v_star**0.5
+    #      if upper_bound>0: xi_v[j] = trunc_norm(mu_v_star,  sigma2_v_star, 0, upper_bound)
+    # if i>burn:
+    #     xi_v_tot += xi_v 
              
          
     #xi_s (improve by vectorizing?)
