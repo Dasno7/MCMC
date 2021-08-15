@@ -396,28 +396,6 @@ test= priceData010621BTC_CALL.where((priceData010621BTC_CALL[strikeBTC.name]/pri
 axis12 = mesh_plotBTC_Call(fig2,axis12,"7 June 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price']/np.sqrt(365))
 
 optionChain = getOptionChain(test)
-# np.mean(test['base_price'])
-# np.sort(np.array(optionChain[4]['Strike']))
-# np.sort(np.array(optionChain[53]['Strike']))
-# np.sort(np.array(optionChain[109]['Strike']))
-# np.sort(np.array(optionChain[207]['Strike']))
-# np.sort(np.array(optionChain[291]['Strike']))
-
-# check = priceData010621BTC.where(priceData010621BTC['TimeToMaturity']==291).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
-# plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
-# check = priceData010621BTC.where(priceData010621BTC['TimeToMaturity']==109).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
-# plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
-# check = priceData010621BTC.where(priceData010621BTC['TimeToMaturity']==4).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
-# plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
-# plt.show()
-
-# check = priceData010621BTC.where(priceData010621BTC['Strike']==70000).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
-# plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
-# check = priceData010621BTC.where(priceData010621BTC['Strike']==35000).dropna().where(priceData010621BTC['OptionType']=='C').dropna().drop(index=100997)
-# plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
-# check = priceData010621BTC.where(priceData010621BTC['Strike']==20000).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
-# plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
-# plt.show()
 
 #2
 priceData120321BTC_CALL= priceData120321BTC.where(priceData120321BTC['OptionType']=='C').dropna()
@@ -425,28 +403,6 @@ test= priceData120321BTC_CALL.where((priceData120321BTC_CALL[strikeBTC.name]/pri
 axis22 = mesh_plotBTC_Call(fig2,axis22,"14 March 2021",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price']/np.sqrt(365))
 
 optionChain = getOptionChain(test)
-# np.mean(test['base_price'])
-# np.sort(np.array(optionChain[5]['Strike']))
-# np.sort(np.array(optionChain[47]['Strike']))
-# np.sort(np.array(optionChain[103]['Strike']))
-# np.sort(np.array(optionChain[194]['Strike']))
-# np.sort(np.array(optionChain[292]['Strike']))
-
-# check = priceData120321BTC_CALL.where(priceData120321BTC_CALL['TimeToMaturity']==292).dropna().where(priceData120321BTC_CALL['OptionType']=='C').dropna()
-# plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
-# check = priceData120321BTC_CALL.where(priceData120321BTC_CALL['TimeToMaturity']==103).dropna().where(priceData120321BTC_CALL['OptionType']=='C').dropna()
-# plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
-# check = priceData120321BTC_CALL.where(priceData120321BTC_CALL['TimeToMaturity']==47).dropna().where(priceData120321BTC_CALL['OptionType']=='C').dropna()
-# plt.plot(check.sort_values(by=strikeBTC.name)[strikeBTC.name]/check.sort_values(by=strikeBTC.name)['base_price'], check.sort_values(by=strikeBTC.name)['theo_price'])
-# plt.show()
-
-# check = priceData010621BTC.where(priceData010621BTC['Strike']==70000).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
-# plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
-# check = priceData010621BTC.where(priceData010621BTC['Strike']==35000).dropna().where(priceData010621BTC['OptionType']=='C').dropna().drop(index=100997)
-# plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
-# check = priceData010621BTC.where(priceData010621BTC['Strike']==20000).dropna().where(priceData010621BTC['OptionType']=='C').dropna()
-# plt.plot(check.sort_values(by='TimeToMaturity')['TimeToMaturity']/365, check.sort_values(by='TimeToMaturity')['theo_price'])
-# plt.show()
 
 
 #3
@@ -455,12 +411,6 @@ test= priceData161120BTC_CALL.where((priceData161120BTC_CALL[strikeBTC.name]/pri
 surf = mesh_plotBTC_Call2(fig2,axis32,"16 November 2020",test[strikeBTC.name]/test['base_price'],test[timeToMatBTC.name]/365,test['theo_price']/np.sqrt(365))
 
 optionChain = getOptionChain(test)
-# np.mean(test['base_price'])
-# np.sort(np.array(optionChain[4]['Strike']))
-# np.sort(np.array(optionChain[18]['Strike']))
-# np.sort(np.array(optionChain[39]['Strike']))
-# np.sort(np.array(optionChain[130]['Strike']))
-# np.sort(np.array(optionChain[221]['Strike']))
 
 
 fig2.colorbar(surf, ax=[axis12, axis22, axis32], shrink = 0.4, aspect = 7)
@@ -506,12 +456,6 @@ test= priceData010621ETH_CALL.where((priceData010621ETH_CALL[strikeETH.name]/pri
 axis1 = mesh_plotETH_Call(fig,axis1,"7 June 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price']/np.sqrt(365))
 
 optionChain = getOptionChain(test)
-# np.mean(test['base_price'])
-# np.sort(np.array(optionChain[4]['Strike']))
-# np.sort(np.array(optionChain[18]['Strike']))
-# np.sort(np.array(optionChain[53]['Strike']))
-# np.sort(np.array(optionChain[109]['Strike']))
-# np.sort(np.array(optionChain[207]['Strike']))
 
 #2
 priceData120321ETH_CALL= priceData120321ETH.where(priceData120321ETH['OptionType']=='C').dropna()
@@ -519,12 +463,6 @@ test= priceData120321ETH_CALL.where((priceData120321ETH_CALL[strikeETH.name]/pri
 axis2 = mesh_plotETH_Call(fig,axis2,"14 March 2021",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price']/np.sqrt(365))
 
 optionChain = getOptionChain(test)
-# np.mean(test['base_price'])
-# np.sort(np.array(optionChain[5]['Strike']))
-# np.sort(np.array(optionChain[12]['Strike']))
-# np.sort(np.array(optionChain[103]['Strike']))
-# np.sort(np.array(optionChain[194]['Strike']))
-# np.sort(np.array(optionChain[292]['Strike']))
 
 #3
 priceData161120ETH_CALL= priceData161120ETH.where(priceData161120ETH['OptionType']=='C').dropna()
@@ -532,12 +470,6 @@ test= priceData161120ETH_CALL.where((priceData161120ETH_CALL[strikeETH.name]/pri
 surf = mesh_plotETH_Call2(fig,axis3,"16 November 2020",test[strikeETH.name]/test['base_price'],test[timeToMatETH.name]/365,test['theo_price']/np.sqrt(365))
 
 optionChain = getOptionChain(test)
-# np.mean(test['base_price'])
-# np.sort(np.array(optionChain[4]['Strike']))
-# np.sort(np.array(optionChain[18]['Strike']))
-# np.sort(np.array(optionChain[39]['Strike']))
-# np.sort(np.array(optionChain[130]['Strike']))
-# np.sort(np.array(optionChain[221]['Strike']))
 
 
 fig.colorbar(surf, ax=[axis1, axis2, axis3], shrink = 0.4, aspect = 7)

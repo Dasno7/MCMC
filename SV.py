@@ -11,9 +11,6 @@ import scipy.stats as stats
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 import datetime
-# from math import gamma
-#from multiprocess import Pool
-
 
 #BTC price data
 btc_data = pd.read_csv("Crypto Data Repo/Bitcoin Historical Data.csv")
@@ -47,7 +44,7 @@ def getLongTermVar(annualized_returns,x):
     return mu_theta,var_theta
 
 #Prior distribution hyperparameter values
-a=np.mean(Y);A=np.var(Y);#b=0;B=1;c=0;C=1;
+a=np.mean(Y);A=np.var(Y);b=0;B=1;c=0;C=1;
 V = 0.1*(Y-np.mean(Y))**2+0.9*(np.var(Y)) #initial values for variance_t
 d,D = get_hyperGamma(V,30)
 theta_star,theta_starVar = getLongTermVar(Y,30)
@@ -56,8 +53,8 @@ b=kappa_star*theta_star;B=theta_starVar*kappa_starVar
 c=1-kappa_star;C = kappa_starVar
 
 #starting values parameters
-#V0=V[0]
-#V_min1 = pd.Series(np.append(V[0],np.array(V.shift(1)[1:])),index= V.index)
+V0=V[0]
+V_min1 = pd.Series(np.append(V[0],np.array(V.shift(1)[1:])),index= V.index)
 sigma2_v=D/(d-1)
 alpha=b;beta=c;m=a;rho=0;
 
@@ -110,25 +107,11 @@ for i in tqdm(range(N)):
     d_star = d+T
     D_star = D+np.sum((V-alpha-beta*V_min1)**2/(V_min1))
 
-    # def inv_gamma(x,a,b):
-    #     y = (1/x)**(a+1)*np.exp(-b/x)
-    #     b/(a-1)
-    #     b**2/((a-1)**2*(a-2))
-    #     return (y)
-    
-    # x=np.arange(100,8000,10000)
-    # plt.plot(x,inv_gamma(x,85000,818800))
-    # plt.show()
     sigma2_v_prop = stats.invwishart.rvs(d_star,D_star)
-    #sigma2_v_prop = sigma2_v + stdRho*np.random.standard_t(dfSigV)
     e_v = V-alpha-V_min1*beta
     q = np.exp(-0.5*np.sum((e_v)**2/(sigma2_v_prop*V_min1) - (e_v)**2/(sigma2_v*V_min1)))
     p = np.exp(-0.5*np.sum(((e_v)**2-2*rho*sigma2_v_prop**0.5*(Y-m))/((1-rho**2)*sigma2_v_prop*V_min1)-((e_v)**2-2*rho*sigma2_v**0.5*(Y-m))/((1-rho**2)*sigma2_v*V_min1)))
-      
-    #if q!=np.inf and q!=0.0:
     x = min(p/q,1)
-    #else:
-    #    x=1
     u = np.random.uniform(0,1)
     if x>u:
         sigma2_v = sigma2_v_prop
@@ -213,12 +196,7 @@ for i in tqdm(range(N)):
     if i>burn: Vtot+= V
     if i>np.floor(burn/2)-100 or i < np.floor(burn/2):   Vtot2 += V
     
-    
-# #speed up calculations
-# pool4 = Pool(processes=4)
-# result_list = list(tqdm(pool4.imap_unordered(Bootstrap, arglist), total=REP))
-# pool4.close()
-# pool4.join()    
+ 
     
     
 #Monte carlo estimates
@@ -231,8 +209,8 @@ V_result = Vtot/(N-burn)
 print(m,sigma2_v,alpha,beta,rho)
         
 #Y.plot()
-# plt.plot(sig2V_save)
-# plt.show()
+plt.plot(sig2V_save)
+plt.show()
         
 
     

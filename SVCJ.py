@@ -73,23 +73,23 @@ kappa_star = 0.5;kappa_starVar=0.1
 b=kappa_star*theta_star;B=theta_starVar*kappa_starVar
 c=1-kappa_star;C = kappa_starVar
 e = np.mean(Y[np.where(J==1)[0]]); E = np.var(Y[np.where(J==1)[0]])
-#e=0;E=100
+e=0;E=100
 k,K = get_hyperBeta(Y) #hyper lambda
 g=0;G=4 #rho_j
 
 #starting values parameters
-#V0=V[0]
-#V_min1 = pd.Series(np.append(V[0],np.array(V.shift(1)[1:])),index= V.index)
+V0=V[0]
+V_min1 = pd.Series(np.append(V[0],np.array(V.shift(1)[1:])),index= V.index)
 sigma2_v=D/(d-1)
 alpha=b;beta=c;m=a;rho=0;
-#r,R = get_hyperGamma(Y[np.where(J==1)[0]],5) #hyper of mu_v
+r,R = get_hyperGamma(Y[np.where(J==1)[0]],5) #hyper of mu_v
 r=10;R=20
 mu_v = (R/(r-1))*0
 xi_v = np.random.exponential(mu_v,T)
 rho_j=0
 mu_s = e
 xi_s = np.random.normal(e+rho_j*xi_v,E**0.5)*J
-#h,H = get_hyperGamma(Y[np.where(J==1)[0]],int(np.round(np.where(J==1)[0].shape[0]/5)))
+h,H = get_hyperGamma(Y[np.where(J==1)[0]],int(np.round(np.where(J==1)[0].shape[0]/5)))
 h=10;H=40
 sigma2_s = 0.01#(H/(h-1))
 
@@ -223,22 +223,22 @@ for i in tqdm(range(N)):
     sigma2S_save[i] = sigma2_s
     
     #Draw mu_v
-    # r_star = r+2*T
-    # R_star = R+2*np.sum(xi_v)
-    # mu_v = stats.invwishart.rvs(r_star,R_star)
-    # if i > burn:
-    #     mVtot += mu_v
-    #     mVtot2 += mu_v**2
-    # muV_save[i] = mu_v
+    r_star = r+2*T
+    R_star = R+2*np.sum(xi_v)
+    mu_v = stats.invwishart.rvs(r_star,R_star)
+    if i > burn:
+        mVtot += mu_v
+        mVtot2 += mu_v**2
+    muV_save[i] = mu_v
         
     #Draw rho_J
-    # G_star=1/(np.sum(xi_v**2)/sigma2_s+1/G)
-    # g_star=G_star*(np.sum((xi_s-mu_s)*xi_v)/sigma2_s+g/G)
-    # rho_j = np.random.normal(g_star,G_star**0.5)
-    # if i>burn:
-    #     rho_jtot += rho_j
-    #     rho_jtot2 += rho_j**2
-    # rho_j_save[i] = rho_j
+    G_star=1/(np.sum(xi_v**2)/sigma2_s+1/G)
+    g_star=G_star*(np.sum((xi_s-mu_s)*xi_v)/sigma2_s+g/G)
+    rho_j = np.random.normal(g_star,G_star**0.5)
+    if i>burn:
+        rho_jtot += rho_j
+        rho_jtot2 += rho_j**2
+    rho_j_save[i] = rho_j
         
     #Jumps
     eY0 = Y - m
@@ -255,17 +255,17 @@ for i in tqdm(range(N)):
     #xi_v     (improve by vectorizing?)
     Jindex = np.where(J==1)[0] 
     Jnot = np.where(J==0)[0] 
-    # xi_v[Jnot] = np.random.exponential(mu_v,xi_v[Jnot].size)
-    # if Jindex.size != 0:
-    #     for j in Jindex:
-    #      eY = Y[j]-m-xi_s[j]
-    #      eV  = V[j]-alpha-V_min1[j]*beta
-    #      sigma2_v_star = 1/(1/(sigma2_v*(1-rho**2)*V_min1[j])+rho_j**2/sigma2_s**2)
-    #      mu_v_star = sigma2_v_star*((eV-rho*sigma2_v**0.5*eY)/(sigma2_v*(1-rho**2)*V_min1[j])+rho_j*(xi_s[j]-mu_s)/(sigma2_s)-1/mu_v)
-    #      upper_bound = mu_v_star+5*sigma2_v_star**0.5
-    #      if upper_bound>0: xi_v[j] = trunc_norm(mu_v_star,  sigma2_v_star, 0, upper_bound)
-    # if i>burn:
-    #     xi_v_tot += xi_v 
+    xi_v[Jnot] = np.random.exponential(mu_v,xi_v[Jnot].size)
+    if Jindex.size != 0:
+        for j in Jindex:
+          eY = Y[j]-m-xi_s[j]
+          eV  = V[j]-alpha-V_min1[j]*beta
+          sigma2_v_star = 1/(1/(sigma2_v*(1-rho**2)*V_min1[j])+rho_j**2/sigma2_s**2)
+          mu_v_star = sigma2_v_star*((eV-rho*sigma2_v**0.5*eY)/(sigma2_v*(1-rho**2)*V_min1[j])+rho_j*(xi_s[j]-mu_s)/(sigma2_s)-1/mu_v)
+          upper_bound = mu_v_star+5*sigma2_v_star**0.5
+          if upper_bound>0: xi_v[j] = trunc_norm(mu_v_star,  sigma2_v_star, 0, upper_bound)
+    if i>burn:
+        xi_v_tot += xi_v 
              
          
     #xi_s (improve by vectorizing?)
@@ -359,8 +359,8 @@ V_result = Vtot/(N-burn)
 print(m,sigma2_v,alpha,beta,rho,mV,mS,sigma2_s,sigma2_v,rho_j,lamb)
         
 #Y.plot()
-# plt.plot(sig2V_save)
-# plt.show()
+plt.plot(sig2V_save)
+plt.show()
         
 
     

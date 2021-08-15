@@ -80,201 +80,201 @@ def matchRealandTheoreticalOptions(realData,fourierData,typeOption):
 #------------------------------------------------------------------------------------------------------
 # Read real option data
 
-# """Pricing data for 14-03-2021""" 
-# priceData120321 = pd.read_csv("C:/Users/Sameer/Documents/Econometrics/Thesis/Crypto Data/thesis_data/2021_03_12/price_data_2021_03_12.csv")
-# startDate = datetime.strptime('2021-03-14','%Y-%m-%d')
-# ## ETH
-# priceData120321ETH = priceData120321.loc[(priceData120321['instrument'].str.startswith('deribit::ETH')&priceData120321['creation_time'].str.startswith('2021-03'))]
-# locationList = []
-# for instrument in priceData120321ETH['instrument'].unique():
-#     locationList.append(np.where(priceData120321ETH['instrument']==instrument)[0][-1])
-#     #locationList.append(priceData120321ETH['instrument'].where(priceData120321ETH['instrument']==instrument).last_valid_index())
-# locationList.sort()
-# priceData120321ETH = priceData120321ETH.iloc[locationList]
-# firstDashETH = priceData120321ETH['instrument'].str.find('-')
-# middleDashETH = priceData120321ETH['instrument'].str.find('-',12+1)
-# lastDashETH = priceData120321ETH['instrument'].str.rfind('-')
+"""Pricing data for 14-03-2021""" 
+priceData120321 = pd.read_csv("Crypto Data Repo/Option Market Data/2021_03_12/price_data_2021_03_12.csv")
+startDate = datetime.strptime('2021-03-14','%Y-%m-%d')
+## ETH
+priceData120321ETH = priceData120321.loc[(priceData120321['instrument'].str.startswith('deribit::ETH')&priceData120321['creation_time'].str.startswith('2021-03'))]
+locationList = []
+for instrument in priceData120321ETH['instrument'].unique():
+    locationList.append(np.where(priceData120321ETH['instrument']==instrument)[0][-1])
+    #locationList.append(priceData120321ETH['instrument'].where(priceData120321ETH['instrument']==instrument).last_valid_index())
+locationList.sort()
+priceData120321ETH = priceData120321ETH.iloc[locationList]
+firstDashETH = priceData120321ETH['instrument'].str.find('-')
+middleDashETH = priceData120321ETH['instrument'].str.find('-',12+1)
+lastDashETH = priceData120321ETH['instrument'].str.rfind('-')
 
-# timeToMatETH = priceData120321ETH['instrument'].copy()
-# timeToMatETH.name = "TimeToMaturity"
-# strikeETH = priceData120321ETH['instrument'].copy()
-# strikeETH.name = "Strike"
-# optionType = priceData120321ETH['instrument'].copy()
-# optionType.name = "OptionType"
-# for quote in priceData120321ETH.index:
-#     if middleDashETH.loc[quote] != -1:
-#         timeToMatETH.loc[quote] = (datetime.strptime(priceData120321ETH.loc[quote]['instrument'][firstDashETH.loc[quote]+1:middleDashETH.loc[quote]],'%d%b%y')-startDate).days
-#         strikeETH.loc[quote] = int(priceData120321ETH.loc[quote]['instrument'][middleDashETH.loc[quote]+1:lastDashETH.loc[quote]])
-#         optionType[quote] = priceData120321ETH.loc[quote]['instrument'][lastDashETH.loc[quote]+1:]
-#     else:  timeToMatETH.loc[quote] = np.nan; strikeETH.loc[quote]=np.nan; optionType[quote]=np.nan
+timeToMatETH = priceData120321ETH['instrument'].copy()
+timeToMatETH.name = "TimeToMaturity"
+strikeETH = priceData120321ETH['instrument'].copy()
+strikeETH.name = "Strike"
+optionType = priceData120321ETH['instrument'].copy()
+optionType.name = "OptionType"
+for quote in priceData120321ETH.index:
+    if middleDashETH.loc[quote] != -1:
+        timeToMatETH.loc[quote] = (datetime.strptime(priceData120321ETH.loc[quote]['instrument'][firstDashETH.loc[quote]+1:middleDashETH.loc[quote]],'%d%b%y')-startDate).days
+        strikeETH.loc[quote] = int(priceData120321ETH.loc[quote]['instrument'][middleDashETH.loc[quote]+1:lastDashETH.loc[quote]])
+        optionType[quote] = priceData120321ETH.loc[quote]['instrument'][lastDashETH.loc[quote]+1:]
+    else:  timeToMatETH.loc[quote] = np.nan; strikeETH.loc[quote]=np.nan; optionType[quote]=np.nan
     
-# priceData120321ETH[timeToMatETH.name]=timeToMatETH.copy()
-# priceData120321ETH[strikeETH.name]=strikeETH.copy()
-# priceData120321ETH[optionType.name]=optionType.copy()
-# priceData120321ETH.dropna(inplace=True)
+priceData120321ETH[timeToMatETH.name]=timeToMatETH.copy()
+priceData120321ETH[strikeETH.name]=strikeETH.copy()
+priceData120321ETH[optionType.name]=optionType.copy()
+priceData120321ETH.dropna(inplace=True)
 
 
-# ## BTC 
-# priceData120321BTC = priceData120321.loc[(priceData120321['instrument'].str.startswith('deribit::BTC')&priceData120321['creation_time'].str.startswith('2021-03'))]
-# locationList = []
-# for instrument in priceData120321BTC['instrument'].unique():
-#     locationList.append(np.where(priceData120321BTC['instrument']==instrument)[0][-1])
-# locationList.sort()
-# priceData120321BTC = priceData120321BTC.iloc[locationList]
-# firstDashBTC = priceData120321BTC['instrument'].str.find('-')
-# middleDashBTC = priceData120321BTC['instrument'].str.find('-',12+1)
-# lastDashBTC = priceData120321BTC['instrument'].str.rfind('-')
+## BTC 
+priceData120321BTC = priceData120321.loc[(priceData120321['instrument'].str.startswith('deribit::BTC')&priceData120321['creation_time'].str.startswith('2021-03'))]
+locationList = []
+for instrument in priceData120321BTC['instrument'].unique():
+    locationList.append(np.where(priceData120321BTC['instrument']==instrument)[0][-1])
+locationList.sort()
+priceData120321BTC = priceData120321BTC.iloc[locationList]
+firstDashBTC = priceData120321BTC['instrument'].str.find('-')
+middleDashBTC = priceData120321BTC['instrument'].str.find('-',12+1)
+lastDashBTC = priceData120321BTC['instrument'].str.rfind('-')
 
-# timeToMatBTC = priceData120321BTC['instrument'].copy()
-# timeToMatBTC.name = "TimeToMaturity"
-# strikeBTC = priceData120321BTC['instrument'].copy()
-# strikeBTC.name = "Strike"
-# optionType = priceData120321BTC['instrument'].copy()
-# optionType.name = "OptionType"
-# for quote in priceData120321BTC.index:
-#     if middleDashBTC.loc[quote] != -1:
-#         timeToMatBTC.loc[quote] = (datetime.strptime(priceData120321BTC.loc[quote]['instrument'][firstDashBTC.loc[quote]+1:middleDashBTC.loc[quote]],'%d%b%y')-startDate).days
-#         strikeBTC.loc[quote] = int(priceData120321BTC.loc[quote]['instrument'][middleDashBTC.loc[quote]+1:lastDashBTC.loc[quote]])
-#         optionType[quote] = priceData120321BTC.loc[quote]['instrument'][lastDashBTC.loc[quote]+1:]
-#     else:  timeToMatBTC.loc[quote] = np.nan; strikeBTC.loc[quote]=np.nan; optionType[quote]=np.nan
+timeToMatBTC = priceData120321BTC['instrument'].copy()
+timeToMatBTC.name = "TimeToMaturity"
+strikeBTC = priceData120321BTC['instrument'].copy()
+strikeBTC.name = "Strike"
+optionType = priceData120321BTC['instrument'].copy()
+optionType.name = "OptionType"
+for quote in priceData120321BTC.index:
+    if middleDashBTC.loc[quote] != -1:
+        timeToMatBTC.loc[quote] = (datetime.strptime(priceData120321BTC.loc[quote]['instrument'][firstDashBTC.loc[quote]+1:middleDashBTC.loc[quote]],'%d%b%y')-startDate).days
+        strikeBTC.loc[quote] = int(priceData120321BTC.loc[quote]['instrument'][middleDashBTC.loc[quote]+1:lastDashBTC.loc[quote]])
+        optionType[quote] = priceData120321BTC.loc[quote]['instrument'][lastDashBTC.loc[quote]+1:]
+    else:  timeToMatBTC.loc[quote] = np.nan; strikeBTC.loc[quote]=np.nan; optionType[quote]=np.nan
     
-# priceData120321BTC[timeToMatBTC.name]=timeToMatBTC.copy()
-# priceData120321BTC[strikeBTC.name]=strikeBTC.copy()
-# priceData120321BTC[optionType.name]=optionType.copy()
-# priceData120321BTC.dropna(inplace=True)
+priceData120321BTC[timeToMatBTC.name]=timeToMatBTC.copy()
+priceData120321BTC[strikeBTC.name]=strikeBTC.copy()
+priceData120321BTC[optionType.name]=optionType.copy()
+priceData120321BTC.dropna(inplace=True)
 
 
-# """Pricing data for 07-06-2021""" 
-# priceData010621 = pd.read_csv("C:/Users/Sameer/Documents/Econometrics/Thesis/Crypto Data/thesis_data/2021_06_01/price_data_2021_06_01.csv")
-# startDate = datetime.strptime('2021-06-07','%Y-%m-%d')
-# ## ETH
-# priceData010621ETH = priceData010621.loc[(priceData010621['instrument'].str.startswith('deribit::ETH')&priceData010621['creation_time'].str.startswith('2021-06'))]
-# locationList = []
-# for instrument in priceData010621ETH['instrument'].unique():
-#     locationList.append(np.where(priceData010621ETH['instrument']==instrument)[0][-1])
-# locationList.sort()
-# priceData010621ETH = priceData010621ETH.iloc[locationList]
-# firstDashETH = priceData010621ETH['instrument'].str.find('-')
-# middleDashETH = priceData010621ETH['instrument'].str.find('-',12+1)
-# lastDashETH = priceData010621ETH['instrument'].str.rfind('-')
+"""Pricing data for 07-06-2021""" 
+priceData010621 = pd.read_csv("Crypto Data Repo/Option Market Data/2021_06_01/price_data_2021_06_01.csv")
+startDate = datetime.strptime('2021-06-07','%Y-%m-%d')
+## ETH
+priceData010621ETH = priceData010621.loc[(priceData010621['instrument'].str.startswith('deribit::ETH')&priceData010621['creation_time'].str.startswith('2021-06'))]
+locationList = []
+for instrument in priceData010621ETH['instrument'].unique():
+    locationList.append(np.where(priceData010621ETH['instrument']==instrument)[0][-1])
+locationList.sort()
+priceData010621ETH = priceData010621ETH.iloc[locationList]
+firstDashETH = priceData010621ETH['instrument'].str.find('-')
+middleDashETH = priceData010621ETH['instrument'].str.find('-',12+1)
+lastDashETH = priceData010621ETH['instrument'].str.rfind('-')
 
-# timeToMatETH = priceData010621ETH['instrument'].copy()
-# timeToMatETH.name = "TimeToMaturity"
-# strikeETH = priceData010621ETH['instrument'].copy()
-# strikeETH.name = "Strike"
-# optionType = priceData010621ETH['instrument'].copy()
-# optionType.name = "OptionType"
-# for quote in priceData010621ETH.index:
-#     if middleDashETH.loc[quote] != -1:
-#         timeToMatETH.loc[quote] = (datetime.strptime(priceData010621ETH.loc[quote]['instrument'][firstDashETH.loc[quote]+1:middleDashETH.loc[quote]],'%d%b%y')-startDate).days
-#         strikeETH.loc[quote] = int(priceData010621ETH.loc[quote]['instrument'][middleDashETH.loc[quote]+1:lastDashETH.loc[quote]])
-#         optionType[quote] = priceData010621ETH.loc[quote]['instrument'][lastDashETH.loc[quote]+1:]
-#     else:  timeToMatETH.loc[quote] = np.nan; strikeETH.loc[quote]=np.nan; optionType[quote]=np.nan
+timeToMatETH = priceData010621ETH['instrument'].copy()
+timeToMatETH.name = "TimeToMaturity"
+strikeETH = priceData010621ETH['instrument'].copy()
+strikeETH.name = "Strike"
+optionType = priceData010621ETH['instrument'].copy()
+optionType.name = "OptionType"
+for quote in priceData010621ETH.index:
+    if middleDashETH.loc[quote] != -1:
+        timeToMatETH.loc[quote] = (datetime.strptime(priceData010621ETH.loc[quote]['instrument'][firstDashETH.loc[quote]+1:middleDashETH.loc[quote]],'%d%b%y')-startDate).days
+        strikeETH.loc[quote] = int(priceData010621ETH.loc[quote]['instrument'][middleDashETH.loc[quote]+1:lastDashETH.loc[quote]])
+        optionType[quote] = priceData010621ETH.loc[quote]['instrument'][lastDashETH.loc[quote]+1:]
+    else:  timeToMatETH.loc[quote] = np.nan; strikeETH.loc[quote]=np.nan; optionType[quote]=np.nan
     
-# priceData010621ETH[timeToMatETH.name]=timeToMatETH.copy()
-# priceData010621ETH[strikeETH.name]=strikeETH.copy()
-# priceData010621ETH[optionType.name]=optionType.copy()
-# priceData010621ETH.dropna(inplace=True)
+priceData010621ETH[timeToMatETH.name]=timeToMatETH.copy()
+priceData010621ETH[strikeETH.name]=strikeETH.copy()
+priceData010621ETH[optionType.name]=optionType.copy()
+priceData010621ETH.dropna(inplace=True)
 
 
-# ## BTC 
-# priceData010621BTC = priceData010621.loc[(priceData010621['instrument'].str.startswith('deribit::BTC')&priceData010621['creation_time'].str.startswith('2021-06'))]
-# locationList = []
-# for instrument in priceData010621BTC['instrument'].unique():
-#     locationList.append(np.where(priceData010621BTC['instrument']==instrument)[0][-1])
-# locationList.sort()
-# priceData010621BTC = priceData010621BTC.iloc[locationList]
-# firstDashBTC = priceData010621BTC['instrument'].str.find('-')
-# middleDashBTC = priceData010621BTC['instrument'].str.find('-',12+1)
-# lastDashBTC = priceData010621BTC['instrument'].str.rfind('-')
+## BTC 
+priceData010621BTC = priceData010621.loc[(priceData010621['instrument'].str.startswith('deribit::BTC')&priceData010621['creation_time'].str.startswith('2021-06'))]
+locationList = []
+for instrument in priceData010621BTC['instrument'].unique():
+    locationList.append(np.where(priceData010621BTC['instrument']==instrument)[0][-1])
+locationList.sort()
+priceData010621BTC = priceData010621BTC.iloc[locationList]
+firstDashBTC = priceData010621BTC['instrument'].str.find('-')
+middleDashBTC = priceData010621BTC['instrument'].str.find('-',12+1)
+lastDashBTC = priceData010621BTC['instrument'].str.rfind('-')
 
-# timeToMatBTC = priceData010621BTC['instrument'].copy()
-# timeToMatBTC.name = "TimeToMaturity"
-# strikeBTC = priceData010621BTC['instrument'].copy()
-# strikeBTC.name = "Strike"
-# optionType = priceData010621BTC['instrument'].copy()
-# optionType.name = "OptionType"
-# for quote in priceData010621BTC.index:
-#     if middleDashBTC.loc[quote] != -1:
-#         timeToMatBTC.loc[quote] = (datetime.strptime(priceData010621BTC.loc[quote]['instrument'][firstDashBTC.loc[quote]+1:middleDashBTC.loc[quote]],'%d%b%y')-startDate).days
-#         strikeBTC.loc[quote] = int(priceData010621BTC.loc[quote]['instrument'][middleDashBTC.loc[quote]+1:lastDashBTC.loc[quote]])
-#         optionType[quote] = priceData010621BTC.loc[quote]['instrument'][lastDashBTC.loc[quote]+1:]
-#     else:  timeToMatBTC.loc[quote] = np.nan; strikeBTC.loc[quote]=np.nan; optionType[quote]=np.nan
+timeToMatBTC = priceData010621BTC['instrument'].copy()
+timeToMatBTC.name = "TimeToMaturity"
+strikeBTC = priceData010621BTC['instrument'].copy()
+strikeBTC.name = "Strike"
+optionType = priceData010621BTC['instrument'].copy()
+optionType.name = "OptionType"
+for quote in priceData010621BTC.index:
+    if middleDashBTC.loc[quote] != -1:
+        timeToMatBTC.loc[quote] = (datetime.strptime(priceData010621BTC.loc[quote]['instrument'][firstDashBTC.loc[quote]+1:middleDashBTC.loc[quote]],'%d%b%y')-startDate).days
+        strikeBTC.loc[quote] = int(priceData010621BTC.loc[quote]['instrument'][middleDashBTC.loc[quote]+1:lastDashBTC.loc[quote]])
+        optionType[quote] = priceData010621BTC.loc[quote]['instrument'][lastDashBTC.loc[quote]+1:]
+    else:  timeToMatBTC.loc[quote] = np.nan; strikeBTC.loc[quote]=np.nan; optionType[quote]=np.nan
     
-# priceData010621BTC[timeToMatBTC.name]=timeToMatBTC.copy()
-# priceData010621BTC[strikeBTC.name]=strikeBTC.copy()
-# priceData010621BTC[optionType.name]=optionType.copy()
-# priceData010621BTC.dropna(inplace=True)
+priceData010621BTC[timeToMatBTC.name]=timeToMatBTC.copy()
+priceData010621BTC[strikeBTC.name]=strikeBTC.copy()
+priceData010621BTC[optionType.name]=optionType.copy()
+priceData010621BTC.dropna(inplace=True)
 
-# """Pricing data for 16-11-2020""" 
-# priceData161120 = pd.read_csv("C:/Users/Sameer/Documents/Econometrics/Thesis/Crypto Data/thesis_data/2020_11_10/price_data_2020_11_10.csv")
-# for file in range(10,17):
-#     if file !=10:
-#         add = pd.read_csv("C:/Users/Sameer/Documents/Econometrics/Thesis/Crypto Data/thesis_data/2020_11_10/price_data_2020_11_"+str(file)+".csv")
-#         priceData161120 = priceData161120.append(add)
-#     add12 = pd.read_csv("C:/Users/Sameer/Documents/Econometrics/Thesis/Crypto Data/thesis_data/2020_11_10/price_data_2020_11_"+str(file)+"_12.csv")
-#     priceData161120 = priceData161120.append(add12)
+"""Pricing data for 16-11-2020""" 
+priceData161120 = pd.read_csv("Crypto Data Repo/Option Market Data/2020_11_10/price_data_2020_11_10.csv")
+for file in range(10,17):
+    if file !=10:
+        add = pd.read_csv("Crypto Data Repo/Option Market Data/2020_11_10/price_data_2020_11_"+str(file)+".csv")
+        priceData161120 = priceData161120.append(add)
+    add12 = pd.read_csv("Crypto Data Repo/Option Market Data/2020_11_10/price_data_2020_11_"+str(file)+"_12.csv")
+    priceData161120 = priceData161120.append(add12)
     
-# startDate = datetime.strptime('2020-11-16','%Y-%m-%d')
-# ## ETH
-# priceData161120ETH = priceData161120.loc[priceData161120['instrument'].str.startswith('deribit::ETH')]
-# locationList = []
-# locArray = np.array(priceData161120ETH['instrument'])
-# for instrument in priceData161120ETH['instrument'].unique():
-#     locationList.append(np.where(locArray==instrument)[0][-1])
-# locationList.sort()
-# priceData161120ETH = priceData161120ETH.iloc[locationList]
-# firstDashETH = priceData161120ETH['instrument'].str.find('-')
-# middleDashETH = priceData161120ETH['instrument'].str.find('-',12+1)
-# lastDashETH = priceData161120ETH['instrument'].str.rfind('-')
+startDate = datetime.strptime('2020-11-16','%Y-%m-%d')
+## ETH
+priceData161120ETH = priceData161120.loc[priceData161120['instrument'].str.startswith('deribit::ETH')]
+locationList = []
+locArray = np.array(priceData161120ETH['instrument'])
+for instrument in priceData161120ETH['instrument'].unique():
+    locationList.append(np.where(locArray==instrument)[0][-1])
+locationList.sort()
+priceData161120ETH = priceData161120ETH.iloc[locationList]
+firstDashETH = priceData161120ETH['instrument'].str.find('-')
+middleDashETH = priceData161120ETH['instrument'].str.find('-',12+1)
+lastDashETH = priceData161120ETH['instrument'].str.rfind('-')
 
-# timeToMatETH = priceData161120ETH['instrument'].copy()
-# timeToMatETH.name = "TimeToMaturity"
-# strikeETH = priceData161120ETH['instrument'].copy()
-# strikeETH.name = "Strike"
-# optionType = priceData161120ETH['instrument'].copy()
-# optionType.name = "OptionType"
-# for quote in priceData161120ETH.index:
-#     if middleDashETH.loc[quote] != -1:
-#         timeToMatETH.loc[quote] = (datetime.strptime(priceData161120ETH.loc[quote]['instrument'][firstDashETH.loc[quote]+1:middleDashETH.loc[quote]],'%d%b%y')-startDate).days
-#         strikeETH.loc[quote] = int(priceData161120ETH.loc[quote]['instrument'][middleDashETH.loc[quote]+1:lastDashETH.loc[quote]])
-#         optionType[quote] = priceData161120ETH.loc[quote]['instrument'][lastDashETH.loc[quote]+1:]
-#     else:  timeToMatETH.loc[quote] = np.nan; strikeETH.loc[quote]=np.nan; optionType[quote]=np.nan
+timeToMatETH = priceData161120ETH['instrument'].copy()
+timeToMatETH.name = "TimeToMaturity"
+strikeETH = priceData161120ETH['instrument'].copy()
+strikeETH.name = "Strike"
+optionType = priceData161120ETH['instrument'].copy()
+optionType.name = "OptionType"
+for quote in priceData161120ETH.index:
+    if middleDashETH.loc[quote] != -1:
+        timeToMatETH.loc[quote] = (datetime.strptime(priceData161120ETH.loc[quote]['instrument'][firstDashETH.loc[quote]+1:middleDashETH.loc[quote]],'%d%b%y')-startDate).days
+        strikeETH.loc[quote] = int(priceData161120ETH.loc[quote]['instrument'][middleDashETH.loc[quote]+1:lastDashETH.loc[quote]])
+        optionType[quote] = priceData161120ETH.loc[quote]['instrument'][lastDashETH.loc[quote]+1:]
+    else:  timeToMatETH.loc[quote] = np.nan; strikeETH.loc[quote]=np.nan; optionType[quote]=np.nan
     
-# priceData161120ETH[timeToMatETH.name]=timeToMatETH.copy()
-# priceData161120ETH[strikeETH.name]=strikeETH.copy()
-# priceData161120ETH[optionType.name]=optionType.copy()
-# priceData161120ETH.dropna(inplace=True)
+priceData161120ETH[timeToMatETH.name]=timeToMatETH.copy()
+priceData161120ETH[strikeETH.name]=strikeETH.copy()
+priceData161120ETH[optionType.name]=optionType.copy()
+priceData161120ETH.dropna(inplace=True)
 
-# ## BTC 
-# priceData161120BTC = priceData161120.loc[priceData161120['instrument'].str.startswith('deribit::BTC')]
-# locationList = []
-# locArray = np.array(priceData161120BTC['instrument'])
-# for instrument in priceData161120BTC['instrument'].unique():
-#     locationList.append(np.where(locArray==instrument)[0][-1])
-# locationList.sort()
-# priceData161120BTC = priceData161120BTC.iloc[locationList]
-# firstDashBTC = priceData161120BTC['instrument'].str.find('-')
-# middleDashBTC = priceData161120BTC['instrument'].str.find('-',12+1)
-# lastDashBTC = priceData161120BTC['instrument'].str.rfind('-')
+## BTC 
+priceData161120BTC = priceData161120.loc[priceData161120['instrument'].str.startswith('deribit::BTC')]
+locationList = []
+locArray = np.array(priceData161120BTC['instrument'])
+for instrument in priceData161120BTC['instrument'].unique():
+    locationList.append(np.where(locArray==instrument)[0][-1])
+locationList.sort()
+priceData161120BTC = priceData161120BTC.iloc[locationList]
+firstDashBTC = priceData161120BTC['instrument'].str.find('-')
+middleDashBTC = priceData161120BTC['instrument'].str.find('-',12+1)
+lastDashBTC = priceData161120BTC['instrument'].str.rfind('-')
 
-# timeToMatBTC = priceData161120BTC['instrument'].copy()
-# timeToMatBTC.name = "TimeToMaturity"
-# strikeBTC = priceData161120BTC['instrument'].copy()
-# strikeBTC.name = "Strike"
-# optionType = priceData161120BTC['instrument'].copy()
-# optionType.name = "OptionType"
-# for quote in priceData161120BTC.index:
-#     if middleDashBTC.loc[quote] != -1:
-#         timeToMatBTC.loc[quote] = (datetime.strptime(priceData161120BTC.loc[quote]['instrument'][firstDashBTC.loc[quote]+1:middleDashBTC.loc[quote]],'%d%b%y')-startDate).days
-#         strikeBTC.loc[quote] = int(priceData161120BTC.loc[quote]['instrument'][middleDashBTC.loc[quote]+1:lastDashBTC.loc[quote]])
-#         optionType[quote] = priceData161120BTC.loc[quote]['instrument'][lastDashBTC.loc[quote]+1:]
-#     else:  timeToMatBTC.loc[quote] = np.nan; strikeBTC.loc[quote]=np.nan; optionType[quote]=np.nan
+timeToMatBTC = priceData161120BTC['instrument'].copy()
+timeToMatBTC.name = "TimeToMaturity"
+strikeBTC = priceData161120BTC['instrument'].copy()
+strikeBTC.name = "Strike"
+optionType = priceData161120BTC['instrument'].copy()
+optionType.name = "OptionType"
+for quote in priceData161120BTC.index:
+    if middleDashBTC.loc[quote] != -1:
+        timeToMatBTC.loc[quote] = (datetime.strptime(priceData161120BTC.loc[quote]['instrument'][firstDashBTC.loc[quote]+1:middleDashBTC.loc[quote]],'%d%b%y')-startDate).days
+        strikeBTC.loc[quote] = int(priceData161120BTC.loc[quote]['instrument'][middleDashBTC.loc[quote]+1:lastDashBTC.loc[quote]])
+        optionType[quote] = priceData161120BTC.loc[quote]['instrument'][lastDashBTC.loc[quote]+1:]
+    else:  timeToMatBTC.loc[quote] = np.nan; strikeBTC.loc[quote]=np.nan; optionType[quote]=np.nan
     
-# priceData161120BTC[timeToMatBTC.name]=timeToMatBTC.copy()
-# priceData161120BTC[strikeBTC.name]=strikeBTC.copy()
-# priceData161120BTC[optionType.name]=optionType.copy()
-# priceData161120BTC.dropna(inplace=True)
+priceData161120BTC[timeToMatBTC.name]=timeToMatBTC.copy()
+priceData161120BTC[strikeBTC.name]=strikeBTC.copy()
+priceData161120BTC[optionType.name]=optionType.copy()
+priceData161120BTC.dropna(inplace=True)
 
 #------------------------------------------------------------------------------------------------------
 # Read fourier results data
@@ -503,7 +503,6 @@ def make_surf(X,Y,Z):
 
 def mesh_plotBTC(fig,ax,title,X,Y,Z):
     XX,YY,ZZ = make_surf(X,Y,Z)
-    #np.nan_to_num(ZZ[:,1350:],copy=False,nan=0)
     ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=10000,limit_direction='both'))
     XX=XX[:,500:1700];YY=YY[:,500:1700];ZZ=ZZ[:,500:1700]
     XX=XX[700:,:];YY=YY[700:,:];ZZ=ZZ[700:,:]   
@@ -511,13 +510,11 @@ def mesh_plotBTC(fig,ax,title,X,Y,Z):
     surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=250, cstride=160,
                         edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=0.83, vcenter=0.8325, vmax=0.835))
     ax.set_title(title, fontdict= { 'fontsize': 18},style='italic',x=0.5,y=0.95)
-    #ax.view_init(33, 230) 
     ax.view_init(20, 60) 
     return surf
 
 def mesh_plotETH(fig,ax,title,X,Y,Z):
     XX,YY,ZZ = make_surf(X,Y,Z)
-    #np.nan_to_num(ZZ[:,1350:],copy=False,nan=0)
     ZZ=np.array(pd.DataFrame(ZZ).interpolate(method='linear',axis=0,limit=10000,limit_direction='both'))
     XX=XX[:,500:1700];YY=YY[:,500:1700];ZZ=ZZ[:,500:1700]
     XX=XX[500:,:];YY=YY[500:,:];ZZ=ZZ[500:,:]   
@@ -525,13 +522,12 @@ def mesh_plotETH(fig,ax,title,X,Y,Z):
     surf = ax.plot_surface(XX,YY,ZZ, cmap=my_cmap, rstride=250, cstride=160,
                         edgecolors='k', lw=0.6, antialiased=True,norm = colors.TwoSlopeNorm(vmin=1.05, vcenter=1.055, vmax=1.06))
     ax.set_title(title, fontdict= { 'fontsize': 18},style='italic',x=0.5,y=0.95)
-    #ax.view_init(33, 230) 
     ax.view_init(20, 60) 
     return surf
 
 
 
-model='GBMJ IV'
+model='Heston IV'
 
 fig, [axis1, axis2, axis3] = plt.subplots(1,3,figsize=(22.5,12), subplot_kw=dict(projection="3d",xlabel=r'$K/S$',ylabel=r'$T$',zlabel=r'$\sigma_{imp}$'),constrained_layout = True)
 
@@ -549,7 +545,7 @@ fig.colorbar(surf, ax=[axis1, axis2, axis3], shrink = 0.4, aspect = 7)
 fig.suptitle("Implied volatility surfaces Bitcoin "+model[:-2]+"model",x=0.5,y=0.785,fontsize= 24, fontweight='bold')
 
 
-model='GBMJ IV'
+model='Heston IV'
 
 fig, [axis1, axis2, axis3] = plt.subplots(1,3,figsize=(22.5,12), subplot_kw=dict(projection="3d",xlabel=r'$K/S$',ylabel=r'$T$',zlabel=r'$\sigma_{imp}$'),constrained_layout = True)
 
